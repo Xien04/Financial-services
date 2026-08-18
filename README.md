@@ -1,6 +1,6 @@
 # Financial Services
 
-Financial Services is a privacy-first, self-hostable personal-finance application for managing accounts, transactions, imports, budgets, recurring expenses, liabilities, savings goals, and financial reporting. Its accounting core will use immutable ledger entries behind a familiar transaction interface so transfers, splits, refunds, and liabilities produce trustworthy balances.
+Financial Services is a privacy-first, self-hostable personal-finance application for managing Philippine-peso accounts, transactions, imports, budgets, recurring expenses, liabilities, savings goals, and financial reporting. Its accounting core will use immutable ledger entries behind a familiar transaction interface so transfers, splits, refunds, and liabilities produce trustworthy balances.
 
 ## Status
 
@@ -38,5 +38,6 @@ Automated tests do not exist yet. Stage 1 will add the project-level test comman
 ## Documentation
 
 - [Product architecture](docs/PRODUCT_ARCHITECTURE.md)
+- [Financial semantics](docs/FINANCIAL_SEMANTICS.md)
 - [Delivery roadmap](docs/ROADMAP.md)
 - [Architecture decision records](docs/adr/README.md)

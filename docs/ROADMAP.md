@@ -13,11 +13,11 @@ Status legend: `[x]` complete, `[ ]` not complete. The milestone named **Current
 - [x] Establish product goals, scope, phased feature matrix, and architecture blueprint.
 - [x] Establish the staged roadmap and ADR convention.
 - [x] Document the initial secret-handling policy and configuration variable names.
-- [ ] Define debit/credit and UI sign conventions for every account type.
-- [ ] Define opening balance, refund, transfer, credit-card payment, void, and adjustment examples.
-- [ ] Define transaction lifecycle and allowed state transitions.
-- [ ] Define financial date, timezone, month-boundary, rounding, and currency-precision rules.
-- [ ] Define net worth, cash flow, burn rate, savings rate, and budget-actual formulas as executable examples.
+- [x] Define debit/credit and UI sign conventions for every account type.
+- [x] Define opening balance, refund, transfer, credit-card payment, void, and adjustment examples.
+- [x] Define transaction lifecycle and allowed state transitions.
+- [x] Define financial date, timezone, month-boundary, rounding, and currency-precision rules.
+- [x] Define net worth, cash flow, burn rate, savings rate, and budget-actual formulas as executable examples.
 - [ ] Produce wireframes for transaction entry, import preview, reconciliation, and dashboard.
 - [ ] Write the first ADRs when implementation decisions are accepted.
 
@@ -261,6 +261,7 @@ None.
 
 ## Completed work
 
+- 2026-08-18: Brenson Go accepted `docs/FINANCIAL_SEMANTICS.md` version 1.0, including Philippine-peso rules, ledger signs, canonical postings, lifecycle, per-entry reconciliation, date/rounding rules, metric formulas, and budget behavior.
 - 2026-08-18: Created the concise repository README, comprehensive product architecture, actionable delivery roadmap, ADR convention, environment-variable template, and dependency placeholder.
 - 2026-08-18: Added preventive ignore rules for local environment files, credential directories, and common service-account JSON filenames.
 - 2026-08-18: Verified `Credentials/Credential-financeapp.json` does not appear in the current repository tree or reachable Git history.

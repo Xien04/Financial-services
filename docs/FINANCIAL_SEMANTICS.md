@@ -2,13 +2,13 @@
 
 | Field | Value |
 |---|---|
-| Status | Proposed for product-owner acceptance |
-| Version | 0.1 |
+| Status | Accepted |
+| Version | 1.0 |
 | Last updated | 2026-08-18 |
-| Applies to | MVP, single workspace base currency |
-| Accepted by | Pending |
+| Applies to | MVP, Philippine peso (`PHP`) base currency |
+| Accepted by | Brenson Go on 2026-08-18 |
 
-This document defines the financial behavior that the ledger, API, imports, reports, budgets, and interface must share. It turns the product blueprint into testable examples. Until the status is changed to **Accepted**, these rules are proposed defaults and must not be hard-coded as settled product decisions.
+This document defines the accepted financial behavior that the ledger, API, imports, reports, budgets, and interface must share. It turns the product blueprint into testable examples. These product semantics are binding unless a later accepted revision explicitly supersedes them.
 
 The words **MUST**, **MUST NOT**, **SHOULD**, and **MAY** are normative.
 
@@ -108,55 +108,55 @@ Imports MAY suggest income or expense from the account classification and amount
 
 ## 3. Canonical posting examples
 
-All examples use USD and assume the transaction becomes posted. Positive and negative signs below are stored ledger amounts.
+All examples use Philippine pesos (`PHP`, symbol `₱`) and assume the transaction becomes posted. Positive and negative signs below are stored ledger amounts.
 
 ### 3.1 Opening balances
 
-Opening a checking account with $1,000:
+Opening a checking account with ₱1,000:
 
 | Target | Amount |
 |---|---:|
 | Checking account | `+1000.00` |
 | System: opening balance equity | `-1000.00` |
 
-Result: checking displays `$1,000.00`; net worth increases by `$1,000.00`; income and cash flow remain unchanged.
+Result: checking displays `₱1,000.00`; net worth increases by `₱1,000.00`; income and cash flow remain unchanged.
 
-Opening a credit card with $600 owed:
+Opening a credit card with ₱600 owed:
 
 | Target | Amount |
 |---|---:|
 | Credit-card account | `-600.00` |
 | System: opening balance equity | `+600.00` |
 
-Result: the card displays `$600.00 owed`; net worth decreases by `$600.00`; expense and cash flow remain unchanged.
+Result: the card displays `₱600.00 owed`; net worth decreases by `₱600.00`; expense and cash flow remain unchanged.
 
 The opening-balance date is the effective beginning-of-day balance date. An opening balance is created atomically with the account. Changing it uses an audited void-and-repost sequence.
 
 ### 3.2 Income
 
-A $2,000 paycheck deposited into checking:
+A ₱2,000 paycheck deposited into checking:
 
 | Target | Amount |
 |---|---:|
 | Checking account | `+2000.00` |
 | Income: Salary | `-2000.00` |
 
-Result: checking and net worth increase by `$2,000.00`; income and cash flow increase by `$2,000.00`.
+Result: checking and net worth increase by `₱2,000.00`; income and cash flow increase by `₱2,000.00`.
 
 ### 3.3 Expense
 
-A $50 grocery purchase paid from checking:
+A ₱50 grocery purchase paid from checking:
 
 | Target | Amount |
 |---|---:|
 | Expense: Groceries | `+50.00` |
 | Checking account | `-50.00` |
 
-Result: checking and net worth decrease by `$50.00`; expense increases and cash flow decreases by `$50.00`.
+Result: checking and net worth decrease by `₱50.00`; expense increases and cash flow decreases by `₱50.00`.
 
 ### 3.4 Split expense
 
-An $82.40 checking purchase split between groceries and household supplies:
+An ₱82.40 checking purchase split between groceries and household supplies:
 
 | Target | Amount |
 |---|---:|
@@ -168,7 +168,7 @@ The category allocations MUST equal the magnitude of the account-side amount exa
 
 ### 3.5 Asset transfer
 
-Moving $500 from checking to savings:
+Moving ₱500 from checking to savings:
 
 | Target | Amount |
 |---|---:|
@@ -179,42 +179,42 @@ Result: total net worth and all income/expense metrics remain unchanged.
 
 ### 3.6 Credit-card purchase
 
-Charging $75 of groceries:
+Charging ₱75 of groceries:
 
 | Target | Amount |
 |---|---:|
 | Expense: Groceries | `+75.00` |
 | Credit-card account | `-75.00` |
 
-Result: the displayed card balance owed and expense increase by `$75.00`; net worth and cash flow decrease by `$75.00`.
+Result: the displayed card balance owed and expense increase by `₱75.00`; net worth and cash flow decrease by `₱75.00`.
 
 ### 3.7 Credit-card payment
 
-Paying $200 from checking to a credit card:
+Paying ₱200 from checking to a credit card:
 
 | Target | Amount |
 |---|---:|
 | Credit-card account | `+200.00` |
 | Checking account | `-200.00` |
 
-Result: cash and the amount owed each decrease by `$200.00`; net worth is unchanged. The payment is a transfer, not an expense.
+Result: cash and the amount owed each decrease by `₱200.00`; net worth is unchanged. The payment is a transfer, not an expense.
 
 ### 3.8 Refund
 
-A $20 grocery refund returned to checking:
+A ₱20 grocery refund returned to checking:
 
 | Target | Amount |
 |---|---:|
 | Checking account | `+20.00` |
 | Expense: Groceries | `-20.00` |
 
-Result: the refund reduces grocery expense and increases cash flow and net worth by `$20.00`. A credit-card refund uses `+20.00` on the card account and the same `-20.00` expense entry.
+Result: the refund reduces grocery expense and increases cash flow and net worth by `₱20.00`. A credit-card refund uses `+20.00` on the card account and the same `-20.00` expense entry.
 
 Refunds remain `expense` transactions and retain a reference to the original transaction when known. A refund may exceed spending in the selected reporting period; reports and budgets MUST preserve the resulting negative net expense rather than clamp it.
 
 ### 3.9 Loan proceeds
 
-Receiving $10,000 of loan proceeds into checking:
+Receiving ₱10,000 of loan proceeds into checking:
 
 | Target | Amount |
 |---|---:|
@@ -225,7 +225,7 @@ Result: assets and liabilities increase equally; net worth, income, expense, and
 
 ### 3.10 Loan payment with interest
 
-A $300 payment consisting of $250 principal and $50 interest:
+A ₱300 payment consisting of ₱250 principal and ₱50 interest:
 
 | Target | Amount |
 |---|---:|
@@ -233,30 +233,30 @@ A $300 payment consisting of $250 principal and $50 interest:
 | Expense: Interest | `+50.00` |
 | Checking account | `-300.00` |
 
-Result: the displayed loan balance falls by `$250.00`; expense and cash flow decrease by `$50.00`; net worth falls by `$50.00`. Principal repayment is not an expense.
+Result: the displayed loan balance falls by `₱250.00`; expense and cash flow decrease by `₱50.00`; net worth falls by `₱50.00`. Principal repayment is not an expense.
 
 ### 3.11 Manual balance adjustment
 
-Correcting an unreconciled checking balance upward by $25 when no income or expense occurred:
+Correcting an unreconciled checking balance upward by ₱25 when no income or expense occurred:
 
 | Target | Amount |
 |---|---:|
 | Checking account | `+25.00` |
 | System: balance adjustment equity | `-25.00` |
 
-Result: the account and net worth increase by `$25.00`; operating income, expense, and cash flow remain unchanged. The user MUST supply a reason, and the change is audited.
+Result: the account and net worth increase by `₱25.00`; operating income, expense, and cash flow remain unchanged. The user MUST supply a reason, and the change is audited.
 
-If the $25 actually represents missing income, the user records an income transaction instead. The application MUST NOT silently create balance adjustments during reconciliation.
+If the ₱25 actually represents missing income, the user records an income transaction instead. The application MUST NOT silently create balance adjustments during reconciliation.
 
 ### 3.12 Void and replacement
 
-Suppose the posted $50 grocery transaction from section 3.3 should have been $45. The correction runs atomically:
+Suppose the posted ₱50 grocery transaction from section 3.3 should have been ₱45. The correction runs atomically:
 
 1. Mark the original transaction void while retaining its `+50.00` grocery and `-50.00` checking entries for audit.
 2. Post a replacement linked to the original with `+45.00` to groceries and `-45.00` to checking.
 3. Exclude the void transaction and include the replacement in all active calculations.
 
-Result: checking and net worth decrease by `$45.00`, grocery expense is `$45.00`, and exports/audit views retain both versions. A failure at any point leaves the original posted and creates no replacement; retrying the same correction is idempotent.
+Result: checking and net worth decrease by `₱45.00`, grocery expense is `₱45.00`, and exports/audit views retain both versions. A failure at any point leaves the original posted and creates no replacement; retrying the same correction is idempotent.
 
 ## 4. Transaction lifecycle and correction
 
@@ -281,7 +281,7 @@ Posting a pending transaction validates all invariants and makes its entries imm
 
 Reconciliation MUST be tracked per account entry, through a `ReconciliationItem` or equivalent link between a reconciliation record and an account-side ledger entry. It MUST NOT be a transaction-wide status. This is required because the checking and savings legs of one transfer can appear on different statements and be reconciled independently.
 
-Consequently, the proposed implementation removes `reconciled` from the transaction status values described in the initial blueprint. Reconciliation state is orthogonal to `pending`, `posted`, and `void`.
+Consequently, the accepted model removes `reconciled` from the transaction status values described in the initial blueprint. Reconciliation state is orthogonal to `pending`, `posted`, and `void`.
 
 ### 4.3 Corrections and deletion
 
@@ -324,10 +324,10 @@ An as-of balance includes active transactions through the end of the requested f
 
 ## 6. Currency, precision, and rounding
 
-- A workspace has one ISO 4217 base currency in MVP. Every posted entry uses that currency.
+- Philippine peso (`PHP`) is the only supported workspace base currency in MVP. Every posted entry uses `PHP`; multi-currency and foreign-exchange accounting remain deferred.
 - Monetary values use decimal arithmetic and are stored as `NUMERIC(19,4)` or an equivalent exact type. Binary floating point is prohibited.
 - API money values are base-10 strings, such as `"-82.40"`, never JSON floating-point numbers.
-- User-entered and imported postings are quantized to the currency's ISO minor-unit precision before validation. USD therefore posts to `0.01`; a zero-decimal currency posts to whole units.
+- Philippine peso values are quantized to `0.01` (one centavo) before validation and posting.
 - Internal derived calculations use at least 28 decimal digits and do not round intermediate values unless the formula explicitly requires allocation.
 - Final monetary outputs use decimal round-half-to-even at the workspace currency precision.
 - Negative zero is normalized to positive zero.
@@ -433,14 +433,14 @@ Rollover rules:
 - A cap must be zero or positive and use workspace currency precision.
 - Finalized historical budget results are not recomputed silently after category or rule changes; any later recalculation is explicit and audited.
 
-Example with `$500` planned:
+Example with `₱500` planned:
 
 | Prior available | Rollover setting | Current actual | Current available |
 |---:|---|---:|---:|
-| `$100` | Disabled | `$450` | `$50` |
-| `$100` | Enabled, no cap | `$450` | `$150` |
-| `$100` | Enabled, `$60` cap | `$450` | `$110` |
-| `-$75` | Enabled, `$60` cap | `$450` | `-$25` |
+| `₱100` | Disabled | `₱450` | `₱50` |
+| `₱100` | Enabled, no cap | `₱450` | `₱150` |
+| `₱100` | Enabled, `₱60` cap | `₱450` | `₱110` |
+| `-₱75` | Enabled, `₱60` cap | `₱450` | `-₱25` |
 
 ## 10. Required implementation consequences
 
@@ -453,27 +453,27 @@ Acceptance of this document requires the later schema and services to preserve t
 - Route all sign conversion, balance calculation, posting, correction, reconciliation, metric, and budget logic through the owning domain services.
 - Generate executable fixtures from every canonical example before dashboard or import features consume the ledger.
 
-These are proposed semantics, not accepted ADRs. Once accepted, the ledger-entry ADR and data model must cite this document and the product architecture must be aligned where its preliminary `reconciled` transaction status conflicts with per-entry reconciliation.
+These are accepted product semantics, not accepted technical ADRs. The future ledger-entry ADR and data model must cite this document. Changing these behaviors requires an explicit product-semantics revision and any corresponding ADR update.
 
-## 11. Product-owner acceptance checklist
+## 11. Product-owner acceptance record
 
 Approval confirms all of the following choices:
 
-- [ ] Debit-positive storage with negative raw liability balances and positive displayed amounts owed
-- [ ] System-equity offsets for opening balances and non-operating adjustments
-- [ ] Visible system uncategorized categories that remain part of operating reports
-- [ ] Per-account-entry reconciliation, separate from transaction posting status
-- [ ] `transaction_date` for reports/budgets and `posted_date` for reconciliation
-- [ ] Calendar-month MVP periods and `fiscal_month_start_day = 1`
-- [ ] ISO currency precision, exact decimals, and round-half-to-even outputs
-- [ ] Refunds reduce expense without being clamped; burn rate alone is floored at zero
-- [ ] Savings rate is null when income is zero or negative
-- [ ] Negative budget rollover carries in full while a cap limits only positive rollover
-- [ ] All canonical examples, lifecycle transitions, and correction rules above
+- [x] Debit-positive storage with negative raw liability balances and positive displayed amounts owed
+- [x] System-equity offsets for opening balances and non-operating adjustments
+- [x] Visible system uncategorized categories that remain part of operating reports
+- [x] Per-account-entry reconciliation, separate from transaction posting status
+- [x] `transaction_date` for reports/budgets and `posted_date` for reconciliation
+- [x] Calendar-month MVP periods and `fiscal_month_start_day = 1`
+- [x] Philippine peso (`PHP`) as the MVP base currency with `0.01` centavo precision, exact decimals, and round-half-to-even outputs
+- [x] Refunds reduce expense without being clamped; burn rate alone is floored at zero
+- [x] Savings rate is null when income is zero or negative
+- [x] Negative budget rollover carries in full while a cap limits only positive rollover
+- [x] All canonical examples, lifecycle transitions, and correction rules above
 
-After product-owner acceptance:
+Acceptance follow-up:
 
-1. Change the document status to **Accepted**, record the approver and date, and check the applicable Milestone 0 roadmap items.
-2. Align the preliminary architecture model with per-entry reconciliation.
-3. Create the modular-monolith, ledger-entry, and PostgreSQL ADRs before scaffolding relies on them.
-4. Turn every example in section 3 and every formula boundary in sections 6–9 into framework-independent test fixtures during the ledger milestone.
+- [x] Record acceptance and close the applicable Milestone 0 roadmap items.
+- [x] Align the preliminary architecture model with per-entry reconciliation.
+- [ ] Create and accept the modular-monolith, ledger-entry, and PostgreSQL ADRs before scaffolding relies on them.
+- [ ] Turn every example in section 3 and every formula boundary in sections 6–9 into framework-independent test fixtures during the ledger milestone.

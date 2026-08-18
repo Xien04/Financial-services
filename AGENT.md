@@ -7,9 +7,10 @@ This file is the operational entry point for work in this repository. It transla
 Read these sources before proposing or changing code:
 
 1. `docs/adr/*.md` for accepted architecture decisions.
-2. `docs/PRODUCT_ARCHITECTURE.md` for product boundaries, domain invariants, and the planned architecture.
-3. `docs/ROADMAP.md` for sequencing, dependencies, acceptance criteria, and current delivery status.
-4. `README.md`, `.env.example`, `requirements.txt`, and `.gitignore` for repository state and setup constraints.
+2. `docs/FINANCIAL_SEMANTICS.md` for accepted accounting conventions and executable examples.
+3. `docs/PRODUCT_ARCHITECTURE.md` for product boundaries, domain invariants, and the planned architecture.
+4. `docs/ROADMAP.md` for sequencing, dependencies, acceptance criteria, and current delivery status.
+5. `README.md`, `.env.example`, `requirements.txt`, and `.gitignore` for repository state and setup constraints.
 
 If the sources conflict, an accepted ADR governs the technical decision it addresses. Otherwise, preserve the product invariants and MVP boundaries in `docs/PRODUCT_ARCHITECTURE.md`, then follow the milestone gates in `docs/ROADMAP.md`. Do not resolve a material conflict silently: document it and add or supersede an ADR.
 
@@ -19,14 +20,14 @@ Normative words in this file have their ordinary standards meaning: **MUST** and
 
 The repository is in **Stage 0 / Milestone 0**. It contains documentation and configuration placeholders, but no Django API, Next.js application, database, Docker Compose stack, or automated tests.
 
-There are currently **no accepted ADRs**. `docs/adr/README.md` contains only the ADR convention and explicitly says that blueprint decisions are recommendations until implementation begins and an ADR accepts them. The roadmap also leaves the first ADRs and several accounting definitions incomplete.
+There are currently **no accepted ADRs**. `docs/adr/README.md` contains only the ADR convention and explicitly says that blueprint decisions are recommendations until implementation begins and an ADR accepts them. Financial semantics version 1.0 is accepted; the first technical ADRs and interaction wireframes remain incomplete.
 
 Consequently:
 
 - MUST NOT claim that the modular monolith, ledger-entry model, PostgreSQL, or another planned choice has already been accepted by ADR.
 - MUST NOT silently replace the planned stack or architecture with alternatives.
 - Before scaffolding depends on those choices, MUST record and obtain acceptance of ADRs for at least the modular monolith, ledger-entry model, and PostgreSQL, as required by Milestone 1.
-- MUST treat unresolved debit/credit and UI signs, lifecycle transitions, financial dates, month boundaries, rounding, currency precision, and executable metric formulas as unresolved. Do not hard-code assumptions for them.
+- MUST implement debit/credit and UI signs, lifecycle transitions, financial dates, month boundaries, rounding, currency precision, and executable metric formulas according to the accepted `docs/FINANCIAL_SEMANTICS.md`. Do not change them implicitly in code or an unrelated ADR.
 - MUST complete and accept the Milestone 0 definitions and examples before marking Stage 1 foundation work complete.
 - MUST update a roadmap checkbox only after its stated acceptance criteria are met. Intentionally postponed work belongs under `Deferred work`.
 
@@ -93,6 +94,7 @@ The only established physical layout is:
 ├── requirements.txt
 └── docs/
     ├── PRODUCT_ARCHITECTURE.md
+    ├── FINANCIAL_SEMANTICS.md
     ├── ROADMAP.md
     └── adr/
         └── README.md
@@ -126,7 +128,10 @@ The user-facing model is a `Transaction`; balances derive from immutable, posted
 - A user-facing delete of posted financial history MUST be an audited void/archive transition, never physical erasure.
 - Retrying transaction creation or an import batch MUST NOT create a second posting.
 - Idempotency keys are required for imports, transaction creation, and posting operations.
-- MVP entries MUST use the workspace's single base currency.
+- MVP entries MUST use Philippine peso (`PHP`) as the workspace base currency. Multi-currency and foreign-exchange accounting remain deferred.
+- Transaction posting status is `pending`, `posted`, or `void`; reconciliation MUST be linked per account-side ledger entry and MUST NOT be transaction-wide status.
+- Opening balances and non-operating adjustments MUST use explicit system-equity entry roles, never fake income or expense categories.
+- Every workspace MUST have visible, non-deletable uncategorized income and expense categories that remain included in operating reports.
 - Asset balances add to net worth and liability balances subtract. Sign conversion belongs in the domain layer, never ad hoc in the client.
 - Manual balance snapshots change valuation history without inventing income or expense transactions.
 - Goal progress and account allocations MUST NOT double-count shared values.
@@ -138,9 +143,9 @@ The user-facing model is a `Transaction`; balances derive from immutable, posted
 - MUST define rounding behavior and currency precision centrally before implementing calculations that depend on them.
 - MUST store financial dates separately from event timestamps.
 - MUST store timestamps in UTC and display them in the workspace timezone.
-- MUST not infer unresolved financial-date, timezone-boundary, month-boundary, rounding, or sign behavior. Add accepted examples first.
+- MUST use the accepted financial-date, timezone-boundary, calendar-month, round-half-to-even, and sign behavior in `docs/FINANCIAL_SEMANTICS.md`.
 
-The blueprint currently gives high-level metric definitions—net worth is included assets minus included liabilities; cash flow is categorized income minus categorized expenses; budget actuals are posted expense allocations—but the roadmap still requires executable examples and boundary behavior. Preserve those definitions while treating details such as zero-income savings rate and exceptional-category burn-rate behavior as unresolved until documented.
+The blueprint gives high-level metric definitions, and accepted `docs/FINANCIAL_SEMANTICS.md` defines their executable examples and boundary behavior, including zero-income savings rate and burn-rate boundaries. Those rules are mandatory inputs to domain and report tests.
 
 ## Tenant isolation and authorization
 
