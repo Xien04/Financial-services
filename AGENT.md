@@ -8,9 +8,10 @@ Read these sources before proposing or changing code:
 
 1. `docs/adr/*.md` for accepted architecture decisions.
 2. `docs/FINANCIAL_SEMANTICS.md` for accepted accounting conventions and executable examples.
-3. `docs/PRODUCT_ARCHITECTURE.md` for product boundaries, domain invariants, and the planned architecture.
-4. `docs/ROADMAP.md` for sequencing, dependencies, acceptance criteria, and current delivery status.
-5. `README.md`, `.env.example`, `requirements.txt`, and `.gitignore` for repository state and setup constraints.
+3. `docs/PRODUCT_WIREFRAMES.md` and `docs/wireframes/*.md` for proposed or accepted core workflow behavior; their status determines whether they are binding.
+4. `docs/PRODUCT_ARCHITECTURE.md` for product boundaries, domain invariants, and the planned architecture.
+5. `docs/ROADMAP.md` for sequencing, dependencies, acceptance criteria, and current delivery status.
+6. `README.md`, `.env.example`, `requirements.txt`, and `.gitignore` for repository state and setup constraints.
 
 If the sources conflict, an accepted ADR governs the technical decision it addresses. Otherwise, preserve the product invariants and MVP boundaries in `docs/PRODUCT_ARCHITECTURE.md`, then follow the milestone gates in `docs/ROADMAP.md`. Do not resolve a material conflict silently: document it and add or supersede an ADR.
 
@@ -20,7 +21,7 @@ Normative words in this file have their ordinary standards meaning: **MUST** and
 
 The repository is in **Stage 0 / Milestone 0**. It contains documentation and configuration placeholders, but no Django API, Next.js application, database, Docker Compose stack, or automated tests.
 
-There are currently **no accepted ADRs**. `docs/adr/README.md` contains only the ADR convention and explicitly says that blueprint decisions are recommendations until implementation begins and an ADR accepts them. Financial semantics version 1.0 is accepted; the first technical ADRs and interaction wireframes remain incomplete.
+There are currently **no accepted ADRs**. `docs/adr/README.md` contains only the ADR convention and explicitly says that blueprint decisions are recommendations until implementation begins and an ADR accepts them. Financial semantics version 1.0 is accepted; the first technical ADRs remain incomplete, and the product wireframes are drafted but not yet accepted.
 
 Consequently:
 
@@ -95,7 +96,13 @@ The only established physical layout is:
 └── docs/
     ├── PRODUCT_ARCHITECTURE.md
     ├── FINANCIAL_SEMANTICS.md
+    ├── PRODUCT_WIREFRAMES.md
     ├── ROADMAP.md
+    ├── wireframes/
+    │   ├── 01_TRANSACTION_ENTRY.md
+    │   ├── 02_CSV_IMPORT.md
+    │   ├── 03_RECONCILIATION.md
+    │   └── 04_DASHBOARD.md
     └── adr/
         └── README.md
 ```
