@@ -1,1 +1,37 @@
-// Ignore things
+# Local configuration and secrets
+.env
+.env.*
+!.env.example
+Credentials/
+credentials/
+secrets/
+**/*service-account*.json
+**/Credential-*.json
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+*.sqlite3
+
+# Node.js / Next.js
+node_modules/
+.next/
+out/
+coverage/
+
+# Build and tooling output
+dist/
+build/
+.coverage
+htmlcov/
+
+# Editors and operating systems
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db

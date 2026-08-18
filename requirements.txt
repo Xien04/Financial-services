@@ -1,0 +1,4 @@
+# The repository is currently documentation-only (Stage 0).
+# Pin the Django backend's exact production and development dependencies here
+# when the backend is scaffolded in Stage 1. Do not add speculative or unpinned
+# runtime packages before there is application code that imports them.
