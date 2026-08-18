@@ -6,10 +6,12 @@ Financial Services is a privacy-first personal-finance product that helps people
 
 The accounting core exposes familiar transactions to users but calculates balances from ledger entries. That separation prevents transfers, splits, refunds, credit-card payments, and liabilities from corrupting balances or reports.
 
+Detailed signs, postings, lifecycle transitions, date rules, reconciliation behavior, rounding, metrics, and budget formulas are defined by the accepted [FINANCIAL_SEMANTICS.md](FINANCIAL_SEMANTICS.md).
+
 ### Product assumptions
 
 - One user may own multiple financial workspaces or households.
-- MVP supports one base currency per workspace.
+- MVP uses Philippine peso (`PHP`) as the workspace base currency.
 - Investments are tracked as account values in MVP; security-level holdings arrive in V2.
 - CSV import is included in MVP; live bank synchronization waits until reconciliation and deduplication are proven reliable.
 - The application is responsive web software packaged for self-hosting with Docker.
@@ -57,7 +59,7 @@ Correctness gates are equally important: transfers do not affect income or expen
 | Reporting | Monthly summary and CSV export | PDF reports, custom date comparisons | Custom report builder |
 | Notifications | In-app budget and bill alerts | Email/push notifications | Configurable automation |
 | Data portability | Full JSON/CSV export and backup | Encrypted scheduled backup | Restore/version management |
-| Currency | One base currency | Multi-currency with exchange rates | Historical FX reporting |
+| Currency | Philippine peso (`PHP`) | Multi-currency with exchange rates | Historical FX reporting |
 
 ### Explicit MVP exclusions
 
@@ -126,8 +128,8 @@ Cross-module writes should run through application services and explicit databas
 
 Expose a familiar `Transaction` to the user, but calculate balances from immutable, posted `LedgerEntry` records.
 
-- A $50 grocery purchase produces a checking-account entry of `-50` and a categorized expense allocation of `50`.
-- A $500 checking-to-savings transfer produces `-500` against checking and `+500` against savings.
+- A ₱50 grocery purchase produces a checking-account entry of `-50` and a categorized expense allocation of `50`.
+- A ₱500 checking-to-savings transfer produces `-500` against checking and `+500` against savings.
 - A split purchase has one account-side entry and multiple category allocations.
 - Editing a posted transaction creates a new version or void-and-repost sequence atomically; posted entries are not mutated in place.
 
@@ -148,6 +150,9 @@ erDiagram
     TAG ||--o{ TRANSACTION_TAG : applies
     ACCOUNT ||--o{ LEDGER_ENTRY : receives
     CATEGORY ||--o{ LEDGER_ENTRY : classifies
+    ACCOUNT ||--o{ RECONCILIATION : closes
+    RECONCILIATION ||--o{ RECONCILIATION_ITEM : contains
+    LEDGER_ENTRY ||--o| RECONCILIATION_ITEM : reconciled_by
     WORKSPACE ||--o{ BUDGET : defines
     BUDGET ||--o{ BUDGET_LINE : contains
     CATEGORY ||--o{ BUDGET_LINE : limits
@@ -174,10 +179,12 @@ The workspace boundary is the tenant and authorization boundary. Every workspace
 - `id`, `workspace_id`, `name`
 - `account_type`: `cash`, `checking`, `savings`, `credit_card`, `loan`, `investment`, `asset`, or `other`
 - `account_subtype`, `currency`, `institution_name`, `last_four`
-- `opening_balance`, `opening_balance_date`
+- `opening_balance_date`
 - `include_in_net_worth`, `is_asset`, `is_active`, `archived_at`
 
 Store balances with one documented domain convention: asset balances add to net worth and liability balances subtract from it. Convert signs in the domain layer, never ad hoc in the interface.
+
+The account-creation request accepts an opening amount, but the service posts it as an immutable opening-balance transaction with a system-equity offset. An account metadata field must not be added separately when calculating balances.
 
 #### Transactions and ledger entries
 
@@ -185,13 +192,13 @@ Store balances with one documented domain convention: asset balances add to net 
 
 - `id`, `workspace_id`, `transaction_date`, `posted_date`
 - `payee`, `description`, `notes`
-- `status`: `pending`, `posted`, `reconciled`, or `void`
+- `status`: `pending`, `posted`, or `void`
 - `transaction_type`: `income`, `expense`, `transfer`, or `adjustment`
 - `source`: `manual`, `csv`, `bank_feed`, or `recurring`
 - `external_id`, `import_job_id`, `fingerprint`
 - `created_by`, `created_at`, `updated_at`
 
-`ledger_entries` contains `transaction_id`, optional `account_id`, optional `category_id`, amount, currency, memo, sequence, and `is_transfer_leg`.
+`ledger_entries` contains `transaction_id`, optional `account_id`, optional `category_id`, optional `system_role`, amount, currency, memo, sequence, and `is_transfer_leg`. Exactly one of account, category, or system role is populated. Accepted system roles include opening-balance and non-operating balance-adjustment equity.
 
 Validation invariants:
 
@@ -203,9 +210,15 @@ Validation invariants:
 - A transaction and all of its entries commit or fail together.
 - Retried creation requests and import batches cannot post a second copy.
 
+#### Reconciliations
+
+A reconciliation belongs to one account and records its statement date range, statement ending balance, creator, completion timestamp, and audit state. `reconciliation_items` links the reconciliation to selected account-side ledger entries and has a unique constraint on `ledger_entry_id`.
+
+Reconciliation is not transaction status. Each account leg is reconciled independently so the two sides of a transfer may close on different statements. Only posted, non-void entries are eligible, and only the latest reconciliation for an account can be undone in MVP.
+
 #### Categories and tags
 
-Categories have a workspace, name, `income` or `expense` kind, optional parent, visual attributes, and system/active flags. Active names are unique within a parent and kind. Transfers are not categories. Tags are cross-cutting labels such as `vacation`, `reimbursable`, or `business`; categories remain the primary budgeting and reporting dimension.
+Categories have a workspace, name, `income` or `expense` kind, optional parent, visual attributes, and system/active flags. Active names are unique within a parent and kind. Each workspace has visible, non-deletable `Uncategorized Income` and `Uncategorized Expense` system categories. Transfers and system equity are not categories. Tags are cross-cutting labels such as `vacation`, `reimbursable`, or `business`; categories remain the primary budgeting and reporting dimension.
 
 #### Budgets
 
@@ -273,6 +286,9 @@ POST   /api/v1/accounts/{id}/archive
 GET    /api/v1/accounts/{id}/balance
 GET    /api/v1/accounts/{id}/balance-history
 POST   /api/v1/accounts/{id}/reconciliations
+GET    /api/v1/accounts/{id}/reconciliations
+GET    /api/v1/reconciliations/{id}
+POST   /api/v1/reconciliations/{id}/undo
 POST   /api/v1/accounts/{id}/balance-snapshots
 ```
 
@@ -285,7 +301,6 @@ GET    /api/v1/transactions/{id}
 PATCH  /api/v1/transactions/{id}
 DELETE /api/v1/transactions/{id}
 POST   /api/v1/transactions/{id}/split
-POST   /api/v1/transactions/{id}/reconcile
 POST   /api/v1/transactions/bulk-update
 ```
 
