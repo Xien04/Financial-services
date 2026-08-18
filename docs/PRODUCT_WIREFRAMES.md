@@ -2,12 +2,12 @@
 
 | Field | Value |
 |---|---|
-| Status | Proposed for product-owner acceptance |
-| Version | 0.1 |
+| Status | Accepted |
+| Version | 1.0 |
 | Last updated | 2026-08-18 |
 | Applies to | MVP responsive web application |
 | Currency | Philippine peso (`PHP`, `₱`) |
-| Accepted by | Pending |
+| Accepted by | Brenson Go on 2026-08-18 |
 
 These low-fidelity wireframes define information hierarchy, navigation, interaction behavior, responsive adaptation, and required states for the four core workflows. They intentionally do not select branding, a component library, chart library, or final visual style.
 
@@ -161,15 +161,15 @@ No supported layout may require horizontal page scrolling. A data table may use 
 
 ## 8. Product-owner acceptance checklist
 
-- [ ] Shared desktop and mobile application shells are understandable.
-- [ ] Navigation supports all four workflows without dead ends.
-- [ ] Transaction entry covers expense, income, transfer, split, refund, adjustment, pending, posted, correction, and void behavior.
-- [ ] CSV import covers upload, mapping, validation, exact/probable duplicates, confirmation, completion, and reversal.
-- [ ] Reconciliation exposes the difference, never auto-adjusts, and reconciles account entries independently.
-- [ ] Dashboard totals disclose period, `PHP`, inclusion rules, and drill-down behavior.
-- [ ] Loading, empty, error, warning, confirmation, and success states are specified.
-- [ ] Desktop and mobile layouts retain the same financial meaning.
-- [ ] Keyboard, screen-reader, and non-color accessibility requirements are explicit.
-- [ ] No V2/V3 or excluded capability has entered the MVP wireframes.
+- [x] Shared desktop and mobile application shells are understandable.
+- [x] Navigation supports all four workflows without dead ends.
+- [x] Transaction entry covers expense, income, transfer, split, refund, adjustment, pending, posted, correction, and void behavior.
+- [x] CSV import covers upload, mapping, validation, exact/probable duplicates, confirmation, completion, and reversal.
+- [x] Reconciliation exposes the difference, never auto-adjusts, and reconciles account entries independently.
+- [x] Dashboard totals disclose period, `PHP`, inclusion rules, and drill-down behavior.
+- [x] Loading, empty, error, warning, confirmation, and success states are specified.
+- [x] Desktop and mobile layouts retain the same financial meaning.
+- [x] Keyboard, screen-reader, and non-color accessibility requirements are explicit.
+- [x] No V2/V3 or excluded capability has entered the MVP wireframes.
 
-After product-owner acceptance, change this document and each workflow status to **Accepted**, record the approver/date, and mark the Milestone 0 wireframe task complete in [ROADMAP.md](ROADMAP.md).
+Product-owner acceptance is recorded above, every workflow is accepted, and the Milestone 0 wireframe task is complete in [ROADMAP.md](ROADMAP.md).

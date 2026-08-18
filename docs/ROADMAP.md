@@ -18,7 +18,7 @@ Status legend: `[x]` complete, `[ ]` not complete. The milestone named **Current
 - [x] Define transaction lifecycle and allowed state transitions.
 - [x] Define financial date, timezone, month-boundary, rounding, and currency-precision rules.
 - [x] Define net worth, cash flow, burn rate, savings rate, and budget-actual formulas as executable examples.
-- [ ] Produce wireframes for transaction entry, import preview, reconciliation, and dashboard.
+- [x] Produce wireframes for transaction entry, import preview, reconciliation, and dashboard.
 - [ ] Write the first ADRs when implementation decisions are accepted.
 
 ### Dependencies
@@ -261,7 +261,8 @@ None.
 
 ## Completed work
 
-- 2026-08-18: Drafted responsive product wireframes for transaction entry, CSV import, account reconciliation, and dashboard workflows; product-owner acceptance remains pending.
+- 2026-08-18: Drafted ADRs 0001–0003 covering the Django modular monolith and repository layout, balanced ledger-entry model, and PostgreSQL; product-owner acceptance remains pending.
+- 2026-08-18: Brenson Go accepted responsive product wireframes version 1.0 for transaction entry, CSV import, account reconciliation, and dashboard workflows.
 - 2026-08-18: Brenson Go accepted `docs/FINANCIAL_SEMANTICS.md` version 1.0, including Philippine-peso rules, ledger signs, canonical postings, lifecycle, per-entry reconciliation, date/rounding rules, metric formulas, and budget behavior.
 - 2026-08-18: Created the concise repository README, comprehensive product architecture, actionable delivery roadmap, ADR convention, environment-variable template, and dependency placeholder.
 - 2026-08-18: Added preventive ignore rules for local environment files, credential directories, and common service-account JSON filenames.

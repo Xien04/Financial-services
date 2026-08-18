@@ -2,7 +2,9 @@
 
 | Field | Value |
 |---|---|
-| Status | Proposed for product-owner acceptance |
+| Status | Accepted |
+| Version | 1.0 |
+| Accepted by | Brenson Go on 2026-08-18 |
 | Parent | [Product wireframes](../PRODUCT_WIREFRAMES.md) |
 | Financial rules | [Financial semantics](../FINANCIAL_SEMANTICS.md) |
 
@@ -237,15 +239,15 @@ Void confirmation names the transaction, amount, date, and reporting consequence
 
 ## 10. Acceptance scenarios
 
-- [ ] Record a posted cash/checking expense.
-- [ ] Record posted income and Uncategorized Income.
-- [ ] Save and later post a pending transaction.
-- [ ] Split an expense exactly across multiple categories.
-- [ ] Transfer between two different asset accounts.
-- [ ] Pay a credit card without creating an expense.
-- [ ] Record a linked and standalone refund.
-- [ ] Record a reasoned non-operating balance adjustment.
-- [ ] Correct an unreconciled posted transaction through void-and-replace.
-- [ ] Block correction of a reconciled account entry with actionable guidance.
-- [ ] Complete each supported action using keyboard-only desktop navigation.
-- [ ] Complete the happy paths at a 320 px mobile width without lost fields or meaning.
+- [x] Record a posted cash/checking expense.
+- [x] Record posted income and Uncategorized Income.
+- [x] Save and later post a pending transaction.
+- [x] Split an expense exactly across multiple categories.
+- [x] Transfer between two different asset accounts.
+- [x] Pay a credit card without creating an expense.
+- [x] Record a linked and standalone refund.
+- [x] Record a reasoned non-operating balance adjustment.
+- [x] Correct an unreconciled posted transaction through void-and-replace.
+- [x] Block correction of a reconciled account entry with actionable guidance.
+- [x] Complete each supported action using keyboard-only desktop navigation.
+- [x] Complete the happy paths at a 320 px mobile width without lost fields or meaning.

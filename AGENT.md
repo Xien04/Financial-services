@@ -8,7 +8,7 @@ Read these sources before proposing or changing code:
 
 1. `docs/adr/*.md` for accepted architecture decisions.
 2. `docs/FINANCIAL_SEMANTICS.md` for accepted accounting conventions and executable examples.
-3. `docs/PRODUCT_WIREFRAMES.md` and `docs/wireframes/*.md` for proposed or accepted core workflow behavior; their status determines whether they are binding.
+3. `docs/PRODUCT_WIREFRAMES.md` and `docs/wireframes/*.md` for accepted core workflow behavior.
 4. `docs/PRODUCT_ARCHITECTURE.md` for product boundaries, domain invariants, and the planned architecture.
 5. `docs/ROADMAP.md` for sequencing, dependencies, acceptance criteria, and current delivery status.
 6. `README.md`, `.env.example`, `requirements.txt`, and `.gitignore` for repository state and setup constraints.
@@ -21,7 +21,7 @@ Normative words in this file have their ordinary standards meaning: **MUST** and
 
 The repository is in **Stage 0 / Milestone 0**. It contains documentation and configuration placeholders, but no Django API, Next.js application, database, Docker Compose stack, or automated tests.
 
-There are currently **no accepted ADRs**. `docs/adr/README.md` contains only the ADR convention and explicitly says that blueprint decisions are recommendations until implementation begins and an ADR accepts them. Financial semantics version 1.0 is accepted; the first technical ADRs remain incomplete, and the product wireframes are drafted but not yet accepted.
+There are currently **no accepted ADRs**. ADRs 0001–0003 are Proposed and therefore non-binding until product-owner acceptance. Financial semantics and product wireframes version 1.0 are accepted.
 
 Consequently:
 
@@ -104,7 +104,10 @@ The only established physical layout is:
     │   ├── 03_RECONCILIATION.md
     │   └── 04_DASHBOARD.md
     └── adr/
-        └── README.md
+        ├── README.md
+        ├── 0001-use-django-modular-monolith.md
+        ├── 0002-use-ledger-entry-model.md
+        └── 0003-use-postgresql.md
 ```
 
 No physical backend, frontend, test, migration, or deployment directory convention has been accepted. Do not invent one and describe it as repository policy. The Stage 1 scaffolding ADRs or accompanying foundation change MUST define the physical layout before it becomes normative.

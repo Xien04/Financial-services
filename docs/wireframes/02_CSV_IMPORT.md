@@ -2,7 +2,9 @@
 
 | Field | Value |
 |---|---|
-| Status | Proposed for product-owner acceptance |
+| Status | Accepted |
+| Version | 1.0 |
+| Accepted by | Brenson Go on 2026-08-18 |
 | Parent | [Product wireframes](../PRODUCT_WIREFRAMES.md) |
 | Financial rules | [Financial semantics](../FINANCIAL_SEMANTICS.md) |
 
@@ -237,17 +239,17 @@ Reversal explains that posted transactions will be voided through an audited bat
 
 ## 11. Acceptance scenarios
 
-- [ ] Upload and inspect a valid CSV without posting transactions.
-- [ ] Reject an invalid file with a specific recoverable explanation.
-- [ ] Map single-amount and separate debit/credit formats.
-- [ ] Preserve and reveal original values while editing normalized staging data.
-- [ ] Review and categorize an otherwise valid uncategorized row.
-- [ ] Resolve an ambiguous transfer explicitly.
-- [ ] Suppress and report a stable-ID exact duplicate.
-- [ ] Require Import or Skip for every probable duplicate.
-- [ ] Skip a malformed row without hiding or corrupting valid rows.
-- [ ] Confirm only after every selected row is valid and reviewed.
-- [ ] Retry a confirmed import without creating duplicate postings.
-- [ ] View a completion report and initiate an audited reversal.
-- [ ] Complete the happy path using keyboard-only desktop navigation.
-- [ ] Review and resolve every state at a 320 px mobile width.
+- [x] Upload and inspect a valid CSV without posting transactions.
+- [x] Reject an invalid file with a specific recoverable explanation.
+- [x] Map single-amount and separate debit/credit formats.
+- [x] Preserve and reveal original values while editing normalized staging data.
+- [x] Review and categorize an otherwise valid uncategorized row.
+- [x] Resolve an ambiguous transfer explicitly.
+- [x] Suppress and report a stable-ID exact duplicate.
+- [x] Require Import or Skip for every probable duplicate.
+- [x] Skip a malformed row without hiding or corrupting valid rows.
+- [x] Confirm only after every selected row is valid and reviewed.
+- [x] Retry a confirmed import without creating duplicate postings.
+- [x] View a completion report and initiate an audited reversal.
+- [x] Complete the happy path using keyboard-only desktop navigation.
+- [x] Review and resolve every state at a 320 px mobile width.

@@ -7,3 +7,11 @@ Add a short ADR here whenever an important technical decision is made. Use seque
 - `0003-use-postgresql.md`
 
 Each ADR should record the status, context, decision, consequences, and date. Decisions described in the product blueprint are recommendations until implementation begins and an ADR accepts them.
+
+## Current records
+
+| ADR | Status |
+|---|---|
+| [0001 — Use a Django modular monolith](0001-use-django-modular-monolith.md) | Proposed |
+| [0002 — Use a balanced ledger-entry model](0002-use-ledger-entry-model.md) | Proposed |
+| [0003 — Use PostgreSQL as the authoritative database](0003-use-postgresql.md) | Proposed |

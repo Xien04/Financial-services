@@ -2,7 +2,9 @@
 
 | Field | Value |
 |---|---|
-| Status | Proposed for product-owner acceptance |
+| Status | Accepted |
+| Version | 1.0 |
+| Accepted by | Brenson Go on 2026-08-18 |
 | Parent | [Product wireframes](../PRODUCT_WIREFRAMES.md) |
 | Financial rules | [Financial semantics](../FINANCIAL_SEMANTICS.md) |
 
@@ -288,17 +290,17 @@ One failed metric or chart does not blank the entire dashboard. The affected reg
 
 ## 11. Acceptance scenarios
 
-- [ ] Display PHP net worth with asset and liability contributions handled correctly.
-- [ ] Display cash flow as categorized income minus expense with transfers excluded.
-- [ ] Explain the exact burn-rate months and insufficient-history state.
-- [ ] Display savings rate and the non-positive-income null state.
-- [ ] Keep pending transactions separate from official metrics.
-- [ ] Preserve negative category spending caused by refunds.
-- [ ] Surface Uncategorized Expense as needing review.
-- [ ] Drill every aggregate down to reproducible supporting records.
-- [ ] Preserve period/account context when opening and returning from a transaction.
-- [ ] Provide equivalent tables for every chart.
-- [ ] Show a useful new-workspace state without fabricated zeroes.
-- [ ] Recover a failed region without obscuring unaffected metrics.
-- [ ] Navigate all controls and drill-down actions using keyboard only.
-- [ ] Retain readable hierarchy and complete meaning at a 320 px mobile width.
+- [x] Display PHP net worth with asset and liability contributions handled correctly.
+- [x] Display cash flow as categorized income minus expense with transfers excluded.
+- [x] Explain the exact burn-rate months and insufficient-history state.
+- [x] Display savings rate and the non-positive-income null state.
+- [x] Keep pending transactions separate from official metrics.
+- [x] Preserve negative category spending caused by refunds.
+- [x] Surface Uncategorized Expense as needing review.
+- [x] Drill every aggregate down to reproducible supporting records.
+- [x] Preserve period/account context when opening and returning from a transaction.
+- [x] Provide equivalent tables for every chart.
+- [x] Show a useful new-workspace state without fabricated zeroes.
+- [x] Recover a failed region without obscuring unaffected metrics.
+- [x] Navigate all controls and drill-down actions using keyboard only.
+- [x] Retain readable hierarchy and complete meaning at a 320 px mobile width.

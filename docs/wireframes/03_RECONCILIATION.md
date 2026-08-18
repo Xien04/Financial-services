@@ -2,7 +2,9 @@
 
 | Field | Value |
 |---|---|
-| Status | Proposed for product-owner acceptance |
+| Status | Accepted |
+| Version | 1.0 |
+| Accepted by | Brenson Go on 2026-08-18 |
 | Parent | [Product wireframes](../PRODUCT_WIREFRAMES.md) |
 | Financial rules | [Financial semantics](../FINANCIAL_SEMANTICS.md) |
 
@@ -264,17 +266,17 @@ For a credit card or loan:
 
 ## 12. Acceptance scenarios
 
-- [ ] Start a first reconciliation and one following prior history.
-- [ ] Enter asset and liability statement balances without sign ambiguity.
-- [ ] Select only posted, non-void entries eligible by Posted date.
-- [ ] Keep pending entries visible but ineligible.
-- [ ] Reconcile only one account leg of a transfer.
-- [ ] Update and announce the difference after every selection.
-- [ ] Block completion at any non-zero centavo difference.
-- [ ] Add a missing transaction without losing reconciliation context.
-- [ ] Offer an explicit reasoned adjustment but never automatic adjustment.
-- [ ] Complete idempotently and show an auditable receipt.
-- [ ] Undo only the latest reconciliation without changing transactions.
-- [ ] Recover safely when eligible activity changes in another session.
-- [ ] Complete the happy path using keyboard-only desktop navigation.
-- [ ] Complete the happy path at a 320 px mobile width.
+- [x] Start a first reconciliation and one following prior history.
+- [x] Enter asset and liability statement balances without sign ambiguity.
+- [x] Select only posted, non-void entries eligible by Posted date.
+- [x] Keep pending entries visible but ineligible.
+- [x] Reconcile only one account leg of a transfer.
+- [x] Update and announce the difference after every selection.
+- [x] Block completion at any non-zero centavo difference.
+- [x] Add a missing transaction without losing reconciliation context.
+- [x] Offer an explicit reasoned adjustment but never automatic adjustment.
+- [x] Complete idempotently and show an auditable receipt.
+- [x] Undo only the latest reconciliation without changing transactions.
+- [x] Recover safely when eligible activity changes in another session.
+- [x] Complete the happy path using keyboard-only desktop navigation.
+- [x] Complete the happy path at a 320 px mobile width.
