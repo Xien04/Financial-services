@@ -8,6 +8,8 @@ The accounting core exposes familiar transactions to users but calculates balanc
 
 Detailed signs, postings, lifecycle transitions, date rules, reconciliation behavior, rounding, metrics, and budget formulas are defined by the accepted [FINANCIAL_SEMANTICS.md](FINANCIAL_SEMANTICS.md).
 
+The four core responsive workflows are defined by the accepted [PRODUCT_WIREFRAMES.md](PRODUCT_WIREFRAMES.md).
+
 ### Product assumptions
 
 - One user may own multiple financial workspaces or households.

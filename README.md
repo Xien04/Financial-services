@@ -39,5 +39,6 @@ Automated tests do not exist yet. Stage 1 will add the project-level test comman
 
 - [Product architecture](docs/PRODUCT_ARCHITECTURE.md)
 - [Financial semantics](docs/FINANCIAL_SEMANTICS.md)
+- [Product wireframes](docs/PRODUCT_WIREFRAMES.md)
 - [Delivery roadmap](docs/ROADMAP.md)
 - [Architecture decision records](docs/adr/README.md)
