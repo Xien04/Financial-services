@@ -42,6 +42,8 @@ The MVP is successful when a user can:
 
 Correctness gates are equally important: transfers do not affect income or expense totals, split allocations balance, all workspace access is authorized, and a backup can be restored successfully.
 
+**Acceptance:** Brenson Go accepted the MVP boundary on 2026-09-18: the product assumptions, MVP success criteria and correctness gates above, and the feature matrix and explicit MVP exclusions in section 2. Technology and design choices in the rest of this document remain recommendations unless an accepted ADR covers them.
+
 ## 2. Feature matrix
 
 | Capability | MVP | V2 | V3 |

@@ -2,8 +2,9 @@
 
 | Field | Value |
 |---|---|
-| Status | Proposed |
+| Status | Accepted |
 | Date | 2026-08-18 |
+| Accepted by | Brenson Go on 2026-09-18 |
 | Decision owners | Product owner and engineering |
 | Related documents | [Accepted financial semantics](../FINANCIAL_SEMANTICS.md), [product architecture](../PRODUCT_ARCHITECTURE.md), [transaction wireframe](../wireframes/01_TRANSACTION_ENTRY.md), [reconciliation wireframe](../wireframes/03_RECONCILIATION.md) |
 
@@ -124,11 +125,11 @@ Rejected because it destroys auditability and can invalidate reconciled statemen
 
 ## Acceptance criteria
 
-- [ ] Product owner accepts Transaction as the user-facing aggregate and LedgerEntry as the balance source.
-- [ ] Product owner accepts debit-positive balanced postings and exclusive entry targets.
-- [ ] Product owner accepts immutable posted entries and audited void-and-replace corrections.
-- [ ] Product owner accepts explicit system-equity roles and uncategorized operating categories.
-- [ ] Product owner accepts per-account-entry reconciliation outside transaction status.
-- [ ] Product owner accepts one authoritative posting service used by APIs, imports, and workers.
+- [x] Product owner accepts Transaction as the user-facing aggregate and LedgerEntry as the balance source.
+- [x] Product owner accepts debit-positive balanced postings and exclusive entry targets.
+- [x] Product owner accepts immutable posted entries and audited void-and-replace corrections.
+- [x] Product owner accepts explicit system-equity roles and uncategorized operating categories.
+- [x] Product owner accepts per-account-entry reconciliation outside transaction status.
+- [x] Product owner accepts one authoritative posting service used by APIs, imports, and workers.
 
-No ledger implementation may treat this ADR as accepted while its status remains Proposed.
+Accepted on 2026-09-18. Ledger implementation follows this decision; changing it requires a superseding ADR.

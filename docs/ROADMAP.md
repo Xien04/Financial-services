@@ -4,7 +4,7 @@ This document tracks delivery. Update a checkbox only when its acceptance criter
 
 Status legend: `[x]` complete, `[ ]` not complete. The milestone named **Current** is the active planning focus; no application implementation has started.
 
-## Milestone 0 — Product and accounting definitions (Current)
+## Milestone 0 — Product and accounting definitions (Complete)
 
 **Outcome:** the team shares one testable vocabulary for financial behavior before code or schema hardens assumptions.
 
@@ -19,7 +19,7 @@ Status legend: `[x]` complete, `[ ]` not complete. The milestone named **Current
 - [x] Define financial date, timezone, month-boundary, rounding, and currency-precision rules.
 - [x] Define net worth, cash flow, burn rate, savings rate, and budget-actual formulas as executable examples.
 - [x] Produce wireframes for transaction entry, import preview, reconciliation, and dashboard.
-- [ ] Write the first ADRs when implementation decisions are accepted.
+- [x] Write the first ADRs when implementation decisions are accepted.
 
 ### Dependencies
 
@@ -31,13 +31,15 @@ None.
 - Ambiguous sign, date, rounding, and lifecycle behavior is resolved in writing.
 - MVP boundaries and success criteria are accepted before Stage 1 scaffolding.
 
-## Milestone 1 — Application foundation
+Accepted and closed by Brenson Go on 2026-09-18.
+
+## Milestone 1 — Application foundation (Current)
 
 **Outcome:** a secure, testable Django/Next.js development environment runs locally and in CI.
 
 ### Features and tasks
 
-- [ ] Record ADRs for the modular monolith, ledger-entry model, and PostgreSQL.
+- [x] Record ADRs for the modular monolith, ledger-entry model, and PostgreSQL.
 - [ ] Scaffold Django, Django REST Framework, Next.js, and TypeScript projects.
 - [ ] Lock production and development dependencies; add automated dependency scanning.
 - [ ] Add PostgreSQL migrations, UUID conventions, and environment-specific settings.
@@ -261,7 +263,9 @@ None.
 
 ## Completed work
 
-- 2026-08-18: Drafted ADRs 0001–0003 covering the Django modular monolith and repository layout, balanced ledger-entry model, and PostgreSQL; product-owner acceptance remains pending.
+- 2026-09-18: Brenson Go accepted the MVP boundaries and success criteria and closed Milestone 0. Milestone 1 is now current.
+- 2026-09-18: Brenson Go accepted ADRs 0001–0003 (Django modular monolith and repository layout, balanced ledger-entry model, PostgreSQL).
+- 2026-08-18: Drafted ADRs 0001–0003 covering the Django modular monolith and repository layout, balanced ledger-entry model, and PostgreSQL; product-owner acceptance followed on 2026-09-18 (see above).
 - 2026-08-18: Brenson Go accepted responsive product wireframes version 1.0 for transaction entry, CSV import, account reconciliation, and dashboard workflows.
 - 2026-08-18: Brenson Go accepted `docs/FINANCIAL_SEMANTICS.md` version 1.0, including Philippine-peso rules, ledger signs, canonical postings, lifecycle, per-entry reconciliation, date/rounding rules, metric formulas, and budget behavior.
 - 2026-08-18: Created the concise repository README, comprehensive product architecture, actionable delivery roadmap, ADR convention, environment-variable template, and dependency placeholder.
@@ -271,5 +275,5 @@ None.
 ## Deferred work
 
 - Application scaffolding and dependency selection are deferred to Milestone 1 so dependencies can be chosen from executable requirements and pinned together.
-- ADR decisions are deferred until development begins; the current architecture document records recommendations, not accepted implementation decisions.
+- Architecture choices not covered by ADRs 0001–0003 (authentication/session strategy, Celery and Redis, API conventions, object storage) remain recommendations in the architecture document until their own ADRs are accepted.
 - Bank feeds, brokerage accounting, real-time pricing, advanced multi-currency accounting, tax preparation, money movement, credit monitoring, and AI-generated advice are outside MVP.

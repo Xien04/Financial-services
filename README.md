@@ -4,7 +4,7 @@ Financial Services is a privacy-first, self-hostable personal-finance applicatio
 
 ## Status
 
-**Planning / Stage 0.** The product and architecture blueprint is documented, but the Django API, Next.js interface, database, and automated tests have not been scaffolded yet. See the [roadmap](docs/ROADMAP.md) for delivery status.
+**Milestone 1 — application foundation.** Product scope, financial semantics, wireframes, and the foundation ADRs are accepted (Milestone 0 closed 2026-09-18), but the Django API, Next.js interface, database, and automated tests have not been scaffolded yet. See the [roadmap](docs/ROADMAP.md) for delivery status.
 
 ## Planned stack
 

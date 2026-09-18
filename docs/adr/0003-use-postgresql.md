@@ -2,8 +2,9 @@
 
 | Field | Value |
 |---|---|
-| Status | Proposed |
+| Status | Accepted |
 | Date | 2026-08-18 |
+| Accepted by | Brenson Go on 2026-09-18 |
 | Decision owners | Product owner and engineering |
 | Related documents | [Product architecture](../PRODUCT_ARCHITECTURE.md), [financial semantics](../FINANCIAL_SEMANTICS.md), [ADR 0001](0001-use-django-modular-monolith.md), [ADR 0002](0002-use-ledger-entry-model.md) |
 
@@ -84,11 +85,11 @@ Not selected for MVP because the immutable ledger already preserves financial hi
 
 ## Acceptance criteria
 
-- [ ] Product owner accepts PostgreSQL as the sole authoritative relational database.
-- [ ] Product owner accepts PostgreSQL for persistence and integration tests rather than SQLite.
-- [ ] Product owner accepts `NUMERIC(19,4)`, UUID, date/timestamp, constraint, and normalized-data conventions.
-- [ ] Product owner accepts Docker Compose PostgreSQL for the default local environment.
-- [ ] Product owner accepts database backup and restore drills as release requirements.
-- [ ] Product owner accepts deferring the exact PostgreSQL major-version pin to Stage 1 scaffolding.
+- [x] Product owner accepts PostgreSQL as the sole authoritative relational database.
+- [x] Product owner accepts PostgreSQL for persistence and integration tests rather than SQLite.
+- [x] Product owner accepts `NUMERIC(19,4)`, UUID, date/timestamp, constraint, and normalized-data conventions.
+- [x] Product owner accepts Docker Compose PostgreSQL for the default local environment.
+- [x] Product owner accepts database backup and restore drills as release requirements.
+- [x] Product owner accepts deferring the exact PostgreSQL major-version pin to Stage 1 scaffolding.
 
-No database scaffolding may treat this ADR as accepted while its status remains Proposed.
+Accepted on 2026-09-18. Database scaffolding follows this decision; changing it requires a superseding ADR.

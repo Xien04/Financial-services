@@ -19,17 +19,18 @@ Normative words in this file have their ordinary standards meaning: **MUST** and
 
 ## Decision status: do not overstate it
 
-The repository is in **Stage 0 / Milestone 0**. It contains documentation and configuration placeholders, but no Django API, Next.js application, database, Docker Compose stack, or automated tests.
+The repository is in **Milestone 1 (application foundation)**. Milestone 0 (product and accounting definitions) was accepted and closed on 2026-09-18. The repository still contains only documentation and configuration placeholders, with no Django API, Next.js application, database, Docker Compose stack, or automated tests.
 
-There are currently **no accepted ADRs**. ADRs 0001–0003 are Proposed and therefore non-binding until product-owner acceptance. Financial semantics and product wireframes version 1.0 are accepted.
+ADRs 0001–0003 were accepted by the product owner on 2026-09-18: the Django modular monolith (including the Next.js client, module ownership, and physical repository layout), the balanced ledger-entry model, and PostgreSQL. Financial semantics and product wireframes version 1.0 are also accepted. No other ADRs exist.
 
 Consequently:
 
-- MUST NOT claim that the modular monolith, ledger-entry model, PostgreSQL, or another planned choice has already been accepted by ADR.
+- The modular monolith, ledger-entry model, and PostgreSQL are binding. Changing any of them requires a superseding ADR.
+- Every other choice in `docs/PRODUCT_ARCHITECTURE.md` (for example authentication/session strategy, Celery and Redis, API conventions, object storage) remains a recommendation until its own ADR is accepted. MUST NOT describe those as accepted.
 - MUST NOT silently replace the planned stack or architecture with alternatives.
-- Before scaffolding depends on those choices, MUST record and obtain acceptance of ADRs for at least the modular monolith, ledger-entry model, and PostgreSQL, as required by Milestone 1.
+- MUST add an ADR before making a material technical decision that the accepted ADRs do not already cover.
 - MUST implement debit/credit and UI signs, lifecycle transitions, financial dates, month boundaries, rounding, currency precision, and executable metric formulas according to the accepted `docs/FINANCIAL_SEMANTICS.md`. Do not change them implicitly in code or an unrelated ADR.
-- MUST complete and accept the Milestone 0 definitions and examples before marking Stage 1 foundation work complete.
+- MUST treat the Milestone 0 definitions, MVP boundaries, and success criteria as accepted inputs. Changing them requires an explicit, recorded revision, not an implicit code or roadmap change.
 - MUST update a roadmap checkbox only after its stated acceptance criteria are met. Intentionally postponed work belongs under `Deferred work`.
 
 ## Product and compliance boundaries
@@ -84,7 +85,7 @@ Background tasks MUST receive identifiers rather than stale object snapshots, re
 
 ## Repository and directory structure
 
-The only established physical layout is:
+The current physical layout (Stage 0, before scaffolding) is:
 
 ```text
 /
@@ -110,9 +111,9 @@ The only established physical layout is:
         └── 0003-use-postgresql.md
 ```
 
-No physical backend, frontend, test, migration, or deployment directory convention has been accepted. Do not invent one and describe it as repository policy. The Stage 1 scaffolding ADRs or accompanying foundation change MUST define the physical layout before it becomes normative.
+The accepted target layout for Stage 1 scaffolding is defined in [ADR 0001](docs/adr/0001-use-django-modular-monolith.md): `backend/` (Django project, `config/`, one package per owning module, `tests/integration` and `tests/contract`), `frontend/` (Next.js `src/app`, `src/features`, `src/lib`), `infra/`, and a root `compose.yaml`. Follow it; do not invent a different convention. Conventions ADR 0001 leaves open (for example the Python dependency manager, frontend package manager, and lint/test tooling) are Milestone 1 decisions and MUST NOT be described as repository policy until recorded.
 
-When that layout is defined, it MUST make the logical ownership above explicit and enforce these placement rules:
+That layout makes the logical ownership above explicit and MUST enforce these placement rules:
 
 - Financial calculations, sign conversion, posting, balance, reconciliation, and invariant enforcement belong to the ledger/accounts domain, not API views or UI code.
 - Authentication, membership checks, and reusable tenant policies belong to identity/workspaces; every owning service and query still applies the workspace boundary.
@@ -247,7 +248,7 @@ The planned Docker Compose topology has separately configurable web, API, Celery
 
 ## Dependency policy
 
-`requirements.txt` is intentionally empty during Stage 0. MUST NOT add speculative or unpinned runtime dependencies before application code imports them. When Stage 1 scaffolding begins, select dependencies from executable requirements, pin exact production and development versions, and add automated scanning.
+`requirements.txt` is intentionally empty until the Python application is scaffolded in Milestone 1. MUST NOT add speculative or unpinned runtime dependencies before application code imports them. When scaffolding begins, select dependencies from executable requirements, pin exact production and development versions, and add automated scanning.
 
 Apply the same evidence-based, locked-dependency policy to the frontend and other runtime manifests when they are created. A new dependency needs a concrete use, fit with the planned stack and deployment model, and inclusion in the appropriate lock/scanning workflow.
 
@@ -260,7 +261,7 @@ Apply the same evidence-based, locked-dependency policy to the frontend and othe
 - [ ] Check the current milestone, its dependencies, incomplete prerequisites, and acceptance criteria in `docs/ROADMAP.md`.
 - [ ] Inspect the existing tree, configuration, tests, and working-tree state; preserve unrelated work.
 - [ ] Classify the request as MVP, V2/V3, or explicitly excluded scope.
-- [ ] Identify unresolved Stage 0 conventions the change would otherwise guess.
+- [ ] Identify unresolved conventions, not covered by accepted documents or ADRs, that the change would otherwise guess.
 
 ### 2. Design within the boundaries
 

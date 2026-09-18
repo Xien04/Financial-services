@@ -2,8 +2,9 @@
 
 | Field | Value |
 |---|---|
-| Status | Proposed |
+| Status | Accepted |
 | Date | 2026-08-18 |
+| Accepted by | Brenson Go on 2026-09-18 |
 | Decision owners | Product owner and engineering |
 | Related documents | [Product architecture](../PRODUCT_ARCHITECTURE.md), [financial semantics](../FINANCIAL_SEMANTICS.md), [product wireframes](../PRODUCT_WIREFRAMES.md) |
 
@@ -114,10 +115,10 @@ Not selected for MVP because coordinated contract, environment, and end-to-end c
 
 ## Acceptance criteria
 
-- [ ] Product owner accepts the Django/DRF modular-monolith direction.
-- [ ] Product owner accepts the Next.js client in the same repository.
-- [ ] Product owner accepts the module ownership table.
-- [ ] Product owner accepts the physical repository layout.
-- [ ] Product owner accepts one backend deployment codebase and one authoritative database for MVP.
+- [x] Product owner accepts the Django/DRF modular-monolith direction.
+- [x] Product owner accepts the Next.js client in the same repository.
+- [x] Product owner accepts the module ownership table.
+- [x] Product owner accepts the physical repository layout.
+- [x] Product owner accepts one backend deployment codebase and one authoritative database for MVP.
 
-No Stage 1 scaffolding may treat this ADR as accepted while its status remains Proposed.
+Accepted on 2026-09-18. Stage 1 scaffolding follows this decision; changing it requires a superseding ADR.

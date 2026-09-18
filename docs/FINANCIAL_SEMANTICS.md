@@ -475,5 +475,5 @@ Acceptance follow-up:
 
 - [x] Record acceptance and close the applicable Milestone 0 roadmap items.
 - [x] Align the preliminary architecture model with per-entry reconciliation.
-- [ ] Create and accept the modular-monolith, ledger-entry, and PostgreSQL ADRs before scaffolding relies on them.
+- [x] Create and accept the modular-monolith, ledger-entry, and PostgreSQL ADRs before scaffolding relies on them (accepted 2026-09-18).
 - [ ] Turn every example in section 3 and every formula boundary in sections 6–9 into framework-independent test fixtures during the ledger milestone.
