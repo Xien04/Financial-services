@@ -151,7 +151,9 @@ npm --prefix frontend run audit
 `pip-audit` is a vulnerability scanner invoked through uv, not the dependency
 installation workflow. Exported requirements are ignored tool output.
 
-Milestone 1 still needs authentication/session decisions, UUID identity and
+Authentication/session strategy and role permissions are accepted in
+[ADR 0006](docs/adr/0006-use-django-sessions-for-browser-authentication.md);
+their implementation remains outstanding. Milestone 1 still needs UUID identity and
 workspace permissions, detailed API/OpenAPI/idempotency conventions, browser
 workflow tests, historical secret scanning, structured logging, production
 hosting, and documented backup/restore drills. Foundation checks alone do not

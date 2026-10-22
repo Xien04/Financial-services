@@ -263,6 +263,7 @@ Accepted and closed by Brenson Go on 2026-09-18.
 
 ## Completed work
 
+- 2026-10-22: Brenson Go accepted [ADR 0006](adr/0006-use-django-sessions-for-browser-authentication.md) covering Django/PostgreSQL browser sessions, session and password-recovery lifetimes, initial owner provisioning without public registration, and workspace role permissions. Authentication implementation and its verification remain outstanding.
 - 2026-10-22: Implemented isolated Django test settings, backend type checking, frontend component tests, fail-on-missing-target HTTP smoke checks, working-tree secret scanning, and their CI commands under ADR 0005. See [testing verification](TESTING_VERIFICATION.md); a hosted CI run and local PostgreSQL verification remain outstanding, so broad milestone gates stay open.
 
 - 2026-09-18: Brenson Go accepted the MVP boundaries and success criteria and closed Milestone 0. Milestone 1 is now current.
@@ -279,6 +280,6 @@ Accepted and closed by Brenson Go on 2026-09-18.
 - Automated-testing follow-up: verify the hosted PostgreSQL/CI run, review historical secrets separately from working-tree scanning, and add browser, tenant-isolation, and accounting/property tests with their owning workflows. See [testing guide](TESTING.md). These are not covered by the foundation component/health tests.
 
 - The initial scaffold uses ADR 0004 tooling and committed uv/npm locks. Full Compose startup, PostgreSQL integration verification, and the first hosted CI run must be confirmed before scaffold delivery is marked complete. Milestone 1 checkboxes remain open pending their full criteria.
-- Authentication/session strategy, UUID identity/workspace schemas, full API/OpenAPI/idempotency conventions, browser workflow tests, historical secret review, structured logging, production serving, and backup/restore drills remain separate Milestone 1 work.
-- Architecture choices not covered by ADRs 0001–0003 (authentication/session strategy, Celery and Redis, API conventions, object storage) remain recommendations in the architecture document until their own ADRs are accepted.
+- Authentication/session implementation under accepted ADR 0006, UUID identity/workspace schemas, full API/OpenAPI/idempotency conventions, browser workflow tests, historical secret review, structured logging, production serving, and backup/restore drills remain separate Milestone 1 work. Rate-limit thresholds and implementation must be recorded before authentication endpoints ship.
+- Architecture choices not covered by an accepted ADR (for example Celery and Redis, detailed API conventions, and object storage) remain recommendations in the architecture document until their own ADRs are accepted.
 - Bank feeds, brokerage accounting, real-time pricing, advanced multi-currency accounting, tax preparation, money movement, credit monitoring, and AI-generated advice are outside MVP.
