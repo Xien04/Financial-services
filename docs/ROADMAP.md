@@ -2,7 +2,7 @@
 
 This document tracks delivery. Update a checkbox only when its acceptance criteria are met, and record intentionally postponed scope under **Deferred work** instead of leaving its status ambiguous.
 
-Status legend: `[x]` complete, `[ ]` not complete. The milestone named **Current** is the active planning focus; no application implementation has started.
+Status legend: `[x]` complete, `[ ]` not complete. The milestone named **Current** is the active planning focus. Initial application scaffolding is in progress; incomplete checks and milestone gates remain open.
 
 ## Milestone 0 — Product and accounting definitions (Complete)
 
@@ -274,6 +274,7 @@ Accepted and closed by Brenson Go on 2026-09-18.
 
 ## Deferred work
 
-- Application scaffolding and dependency selection are deferred to Milestone 1 so dependencies can be chosen from executable requirements and pinned together.
+- The initial scaffold uses ADR 0004 tooling and committed uv/npm locks. Full Compose startup, PostgreSQL integration verification, and the first hosted CI run must be confirmed before scaffold delivery is marked complete. Milestone 1 checkboxes remain open pending their full criteria.
+- Authentication/session strategy, UUID identity/workspace schemas, full API/OpenAPI/idempotency conventions, backend type checking, frontend workflow tests, secret scanning, structured logging, production serving, and backup/restore drills remain separate Milestone 1 work.
 - Architecture choices not covered by ADRs 0001–0003 (authentication/session strategy, Celery and Redis, API conventions, object storage) remain recommendations in the architecture document until their own ADRs are accepted.
 - Bank feeds, brokerage accounting, real-time pricing, advanced multi-currency accounting, tax preparation, money movement, credit monitoring, and AI-generated advice are outside MVP.

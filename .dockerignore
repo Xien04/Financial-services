@@ -1,0 +1,15 @@
+.git
+.env
+.env.*
+!.env.example
+.venv
+.cache
+**/node_modules
+**/.next
+**/__pycache__
+**/*.tsbuildinfo
+Credentials
+credentials
+secrets
+**/*service-account*.json
+**/Credential-*.json

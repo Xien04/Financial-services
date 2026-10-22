@@ -1,0 +1,85 @@
+name: Scaffold checks
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    services:
+      postgres:
+        image: postgres:17.11-bookworm
+        env:
+          POSTGRES_DB: financial_services_test
+          POSTGRES_USER: scaffold_test
+          POSTGRES_PASSWORD: ${{ github.run_id }}-${{ github.run_attempt }}
+        ports:
+          - 127.0.0.1:5432:5432
+        options: >-
+          --health-cmd "pg_isready -U scaffold_test -d financial_services_test"
+          --health-interval 5s --health-timeout 3s --health-retries 12
+    env:
+      DATABASE_URL: postgresql://scaffold_test:${{ github.run_id }}-${{ github.run_attempt }}@127.0.0.1:5432/financial_services_test
+      DJANGO_ALLOWED_HOSTS: localhost,127.0.0.1,testserver
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+      - uses: astral-sh/setup-uv@94527f2e458b27549849d47d273a16bec83a01e9 # v7
+        with:
+          version: "0.13.2"
+      - name: Generate an ephemeral test secret
+        run: |
+          secret=$(openssl rand -hex 32)
+          echo "::add-mask::$secret"
+          echo "DJANGO_SECRET_KEY=$secret" >> "$GITHUB_ENV"
+      - run: uv sync --locked
+      - run: uv run ruff check backend
+      - run: uv run ruff format --check backend
+      - run: uv run python backend/manage.py check
+      - run: uv run python backend/manage.py makemigrations --check --dry-run
+      - run: uv run python backend/manage.py migrate --noinput
+      - run: uv run python backend/manage.py test tests --verbosity 2
+      - name: Audit all locked dependencies
+        run: |
+          mkdir -p .cache
+          uv export --locked --no-emit-project --format requirements-txt --output-file .cache/audit-requirements.txt
+          uv run pip-audit --require-hashes --disable-pip -r .cache/audit-requirements.txt
+
+  frontend:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: frontend
+    env:
+      NEXT_TELEMETRY_DISABLED: "1"
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: "24.19.0"
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm run build
+      - run: npm run audit
+      - name: Exercise the running frontend
+        run: |
+          npm start > "$RUNNER_TEMP/scaffold-web.log" 2>&1 &
+          web_pid=$!
+          trap 'kill "$web_pid"' EXIT
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent http://localhost:3000 > /dev/null; then
+              SMOKE_TEST_URL=http://localhost:3000 npm test
+              exit 0
+            fi
+            sleep 1
+          done
+          cat "$RUNNER_TEMP/scaffold-web.log"
+          exit 1

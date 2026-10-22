@@ -29,6 +29,8 @@ dist/
 build/
 .coverage
 htmlcov/
+.cache/
+*.tsbuildinfo
 
 # Editors and operating systems
 .idea/
