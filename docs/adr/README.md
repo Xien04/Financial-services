@@ -15,3 +15,4 @@ Each ADR should record the status, context, decision, consequences, and date. De
 | [0001 — Use a Django modular monolith](0001-use-django-modular-monolith.md) | Accepted 2026-09-18 |
 | [0002 — Use a balanced ledger-entry model](0002-use-ledger-entry-model.md) | Accepted 2026-09-18 |
 | [0003 — Use PostgreSQL as the authoritative database](0003-use-postgresql.md) | Accepted 2026-09-18 |
+| [0004 — Use uv and the foundation toolchain](0004-use-uv-and-foundation-tooling.md) | Accepted 2026-10-22 |

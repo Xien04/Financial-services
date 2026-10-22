@@ -1,0 +1,28 @@
+[project]
+name = "financial-services"
+version = "0.1.0"
+description = "Privacy-first personal finance application backend"
+requires-python = ">=3.14,<3.15"
+dependencies = [
+    "django==5.2.18",
+    "djangorestframework==3.18.3",
+    "psycopg[binary]==3.3.6",
+]
+
+[dependency-groups]
+dev = [
+    "pip-audit==2.10.1",
+    "ruff==0.17.1",
+]
+
+[tool.uv]
+package = false
+required-version = "==0.13.2"
+
+[tool.ruff]
+target-version = "py314"
+line-length = 100
+src = ["backend"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]

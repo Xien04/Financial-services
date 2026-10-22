@@ -11,7 +11,7 @@ Read these sources before proposing or changing code:
 3. `docs/PRODUCT_WIREFRAMES.md` and `docs/wireframes/*.md` for accepted core workflow behavior.
 4. `docs/PRODUCT_ARCHITECTURE.md` for product boundaries, domain invariants, and the planned architecture.
 5. `docs/ROADMAP.md` for sequencing, dependencies, acceptance criteria, and current delivery status.
-6. `README.md`, `.env.example`, `requirements.txt`, and `.gitignore` for repository state and setup constraints.
+6. `README.md`, `.env.example`, `pyproject.toml`, `uv.lock`, frontend manifests, and `.gitignore` for repository state and setup constraints.
 
 If the sources conflict, an accepted ADR governs the technical decision it addresses. Otherwise, preserve the product invariants and MVP boundaries in `docs/PRODUCT_ARCHITECTURE.md`, then follow the milestone gates in `docs/ROADMAP.md`. Do not resolve a material conflict silently: document it and add or supersede an ADR.
 
@@ -19,9 +19,9 @@ Normative words in this file have their ordinary standards meaning: **MUST** and
 
 ## Decision status: do not overstate it
 
-The repository is in **Milestone 1 (application foundation)**. Milestone 0 (product and accounting definitions) was accepted and closed on 2026-09-18. The repository still contains only documentation and configuration placeholders, with no Django API, Next.js application, database, Docker Compose stack, or automated tests.
+The repository is in **Milestone 1 (application foundation)**. Milestone 0 was accepted and closed on 2026-09-18. A Django/DRF and Next.js scaffold, PostgreSQL Compose configuration, and initial checks now exist. Authentication, identity and ledger schemas, and core workflows remain unimplemented. See the roadmap for verification status; the scaffold does not complete Milestone 1.
 
-ADRs 0001–0003 were accepted by the product owner on 2026-09-18: the Django modular monolith (including the Next.js client, module ownership, and physical repository layout), the balanced ledger-entry model, and PostgreSQL. Financial semantics and product wireframes version 1.0 are also accepted. No other ADRs exist.
+ADRs 0001–0003 were accepted by the product owner on 2026-09-18: the Django modular monolith (including the Next.js client, module ownership, and physical repository layout), the balanced ledger-entry model, and PostgreSQL. Financial semantics and product wireframes version 1.0 are also accepted. ADR 0004 records the 2026-10-22 scaffold tooling decision, including uv selected by the product owner.
 
 Consequently:
 
@@ -85,7 +85,7 @@ Background tasks MUST receive identifiers rather than stale object snapshots, re
 
 ## Repository and directory structure
 
-The current physical layout (Stage 0, before scaffolding) is:
+The original physical layout (Stage 0, before scaffolding) was:
 
 ```text
 /
@@ -111,7 +111,7 @@ The current physical layout (Stage 0, before scaffolding) is:
         └── 0003-use-postgresql.md
 ```
 
-The accepted target layout for Stage 1 scaffolding is defined in [ADR 0001](docs/adr/0001-use-django-modular-monolith.md): `backend/` (Django project, `config/`, one package per owning module, `tests/integration` and `tests/contract`), `frontend/` (Next.js `src/app`, `src/features`, `src/lib`), `infra/`, and a root `compose.yaml`. Follow it; do not invent a different convention. Conventions ADR 0001 leaves open (for example the Python dependency manager, frontend package manager, and lint/test tooling) are Milestone 1 decisions and MUST NOT be described as repository policy until recorded.
+The implemented Stage 1 layout follows [ADR 0001](docs/adr/0001-use-django-modular-monolith.md): `backend/` (Django project, `config/`, one package per owning module, `tests/integration` and `tests/contract`), `frontend/` (Next.js `src/app`, `src/features`, `src/lib`), `infra/`, and root `compose.yaml`. Follow it. [ADR 0004](docs/adr/0004-use-uv-and-foundation-tooling.md) records uv, npm, runtime versions, and initial tooling. Additional unresolved material decisions still require an ADR.
 
 That layout makes the logical ownership above explicit and MUST enforce these placement rules:
 
@@ -215,7 +215,7 @@ If a real credential is discovered, do not merely delete the file: stop exposure
 
 ## Testing and quality gates
 
-No test runner, formatter, linter, type checker, coverage percentage, or strict Python type-hint policy has been selected yet. Do not invent commands or claim a numeric coverage target. Milestone 1 MUST establish reproducible commands for formatting/linting, type checking, backend tests, frontend tests, integration tests, dependency scanning, and secret scanning.
+ADR 0004 selects Django's test runner, Ruff, ESLint, TypeScript checks, and dependency audits. Commands are in README.md and the scaffold CI workflow. Backend type checking, full frontend workflow coverage, and secret scanning remain outstanding. No numeric coverage target or strict Python type-hint policy is selected. Run the relevant existing commands and do not claim missing gates pass.
 
 Once commands exist, every change MUST run all relevant checks. In addition:
 
@@ -248,7 +248,7 @@ The planned Docker Compose topology has separately configurable web, API, Celery
 
 ## Dependency policy
 
-`requirements.txt` is intentionally empty until the Python application is scaffolded in Milestone 1. MUST NOT add speculative or unpinned runtime dependencies before application code imports them. When scaffolding begins, select dependencies from executable requirements, pin exact production and development versions, and add automated scanning.
+Root `pyproject.toml` and `uv.lock` own Python dependencies under ADR 0004; do not restore a parallel requirements manifest. MUST NOT add speculative or unpinned runtime dependencies before application code imports them. Pin exact direct production and development versions, commit transitive locks, and keep automated dependency scanning current.
 
 Apply the same evidence-based, locked-dependency policy to the frontend and other runtime manifests when they are created. A new dependency needs a concrete use, fit with the planned stack and deployment model, and inclusion in the appropriate lock/scanning workflow.
 
