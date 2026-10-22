@@ -21,7 +21,7 @@ Normative words in this file have their ordinary standards meaning: **MUST** and
 
 The repository is in **Milestone 1 (application foundation)**. Milestone 0 was accepted and closed on 2026-09-18. A Django/DRF and Next.js scaffold, PostgreSQL Compose configuration, and initial checks now exist. Authentication, identity and ledger schemas, and core workflows remain unimplemented. See the roadmap for verification status; the scaffold does not complete Milestone 1.
 
-ADRs 0001–0003 were accepted by the product owner on 2026-09-18: the Django modular monolith (including the Next.js client, module ownership, and physical repository layout), the balanced ledger-entry model, and PostgreSQL. Financial semantics and product wireframes version 1.0 are also accepted. ADR 0004 records the 2026-10-22 scaffold tooling decision, including uv selected by the product owner.
+ADRs 0001–0003 were accepted by the product owner on 2026-09-18: the Django modular monolith (including the Next.js client, module ownership, and physical repository layout), the balanced ledger-entry model, and PostgreSQL. Financial semantics and product wireframes version 1.0 are also accepted. ADR 0004 records the 2026-10-22 scaffold tooling decision, including uv selected by the product owner. ADR 0005 records the automated quality-check tooling implemented in the authorized testing task.
 
 Consequently:
 
@@ -215,7 +215,14 @@ If a real credential is discovered, do not merely delete the file: stop exposure
 
 ## Testing and quality gates
 
-ADR 0004 selects Django's test runner, Ruff, ESLint, TypeScript checks, and dependency audits. Commands are in README.md and the scaffold CI workflow. Backend type checking, full frontend workflow coverage, and secret scanning remain outstanding. No numeric coverage target or strict Python type-hint policy is selected. Run the relevant existing commands and do not claim missing gates pass.
+ADR 0004 selects Django's test runner, Ruff, ESLint, TypeScript checks, and dependency audits.
+ADR 0005 extends that toolchain with mypy and Django/DRF stubs, Vitest and React
+Testing Library component tests, isolated test settings, and working-tree secret
+scanning. Use [docs/TESTING.md](docs/TESTING.md) for the current commands and
+scope. Backend type checking and current-tree scanning are now implemented;
+full browser workflow coverage, historical scanning, and verification of hosted
+CI remain outstanding. No numeric coverage target or strict Python type-hint
+policy is selected. Never claim a missing or unrun gate passes.
 
 Once commands exist, every change MUST run all relevant checks. In addition:
 

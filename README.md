@@ -47,7 +47,7 @@ Edit the ignored `.env` and supply these values:
 - `APP_DB_USER`: a different application role name.
 - `APP_DB_PASSWORD`: a different randomly generated application password.
 - `DJANGO_SECRET_KEY`: a separate random secret, at least 50 characters.
-- `DATABASE_URL`: `postgresql://APP_USER:APP_PASSWORD@db:5432/DATABASE_NAME`,
+- `DATABASE_URL`: a PostgreSQL connection URL using your application role,
   substituting the application credentials and database name above. URL-encode
   special characters in credentials. Hexadecimal passwords avoid URL escaping.
 
@@ -91,14 +91,16 @@ the executable. From the repository root:
 ```powershell
 uv sync --locked
 npm --prefix frontend ci
-uv run ruff check backend
-uv run ruff format --check backend
+uv run ruff check backend infra/scan_secrets.py
+uv run ruff format --check backend infra/scan_secrets.py
+uv run mypy
+npm --prefix frontend test
 npm --prefix frontend run lint
 npm --prefix frontend run typecheck
 npm --prefix frontend run build
 ```
 
-Backend commands require `DJANGO_SECRET_KEY`, `DJANGO_ALLOWED_HOSTS`, and
+Application commands require `DJANGO_SECRET_KEY`, `DJANGO_ALLOWED_HOSTS`, and
 `DATABASE_URL` in the process environment, or `uv run --env-file .env`.
 Use `localhost,127.0.0.1,testserver` for local/test allowed hosts. Host commands
 need a reachable PostgreSQL host in `DATABASE_URL`; Compose's `db` hostname works
@@ -106,30 +108,37 @@ only inside Compose. SQLite is not a supported substitute.
 
 ```powershell
 uv run python backend/manage.py check
-uv run python backend/manage.py test tests.contract --verbosity 2
-uv run python backend/manage.py test tests.integration --verbosity 2
+uv run python backend/manage.py test tests.unit tests.contract --settings=config.settings.test --verbosity 2
+uv run python infra/scan_secrets.py
 ```
 
-Contract tests do not access a database. Integration tests require PostgreSQL 17
-and a dedicated test role allowed to create a test database; the Compose
-application role intentionally lacks that privilege. Use disposable test data.
+The test settings generate an ephemeral secret and do not read application
+database credentials. Unit/contract tests and component tests run without a
+database or running application. Integration tests require PostgreSQL 17 and
+`TEST_DATABASE_URL` pointing to a dedicated disposable test instance/role with
+database-creation privileges. Django creates/destroys `test_financial_services`
+on that server. The Compose application role intentionally lacks that privilege.
+See [the testing guide](docs/TESTING.md) for commands, isolation, and test placement.
 
 Run the frontend startup test against the running application:
 
 ```powershell
 $env:SMOKE_TEST_URL = 'http://localhost:3000'
-npm --prefix frontend test
+npm --prefix frontend run test:smoke
 ```
 
-The test explicitly skips when `SMOKE_TEST_URL` is absent. It checks served page
-semantics; browser accessibility and workflow coverage remain separate work.
+The smoke command fails if `SMOKE_TEST_URL` is absent. Set `SMOKE_TEST_API=1`
+to also check same-origin forwarding to Django. CI requires both smoke tests.
+These check served HTML/API responses; browser accessibility and workflow
+coverage remain separate work. The default `npm test` runs component tests.
 For client-only development, `npm --prefix frontend run dev` serves the starter
 page; `API_INTERNAL_URL` defaults to `http://127.0.0.1:8000`.
 
 ## Dependency checks and remaining gates
 
-The scaffold CI workflow defines formatting/linting, PostgreSQL migrations and
-backend tests, frontend lint/type/build/startup checks, and dependency audits.
+The quality CI workflow defines formatting/linting, backend and frontend type
+checks, PostgreSQL migrations and backend tests, frontend component/build/startup
+checks, dependency audits, and working-tree secret scanning.
 Its first hosted run still needs verification. Run audits locally with:
 
 ```powershell
@@ -143,9 +152,9 @@ npm --prefix frontend run audit
 installation workflow. Exported requirements are ignored tool output.
 
 Milestone 1 still needs authentication/session decisions, UUID identity and
-workspace permissions, detailed API/OpenAPI/idempotency conventions, backend type
-checks, frontend workflow tests, secret scanning, structured logging, production
-hosting, and documented backup/restore drills. Scaffold checks alone do not
+workspace permissions, detailed API/OpenAPI/idempotency conventions, browser
+workflow tests, historical secret scanning, structured logging, production
+hosting, and documented backup/restore drills. Foundation checks alone do not
 complete the milestone.
 
 ## Documentation
@@ -155,3 +164,4 @@ complete the milestone.
 - [Accepted wireframes](docs/PRODUCT_WIREFRAMES.md)
 - [Delivery roadmap](docs/ROADMAP.md)
 - [Architecture decision records](docs/adr/README.md)
+- [Testing and quality checks](docs/TESTING.md)

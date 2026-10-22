@@ -1,6 +1,7 @@
 """Shared settings. Financial and identity schemas arrive in later work."""
 
 import os
+from typing import Any
 from urllib.parse import unquote, urlsplit
 
 from django.core.exceptions import ImproperlyConfigured
@@ -51,7 +52,7 @@ try:
 except ValueError:
     raise ImproperlyConfigured("DATABASE_URL must be a valid PostgreSQL URL.") from None
 
-DATABASES = {
+DATABASES: dict[str, dict[str, Any]] = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
         "NAME": unquote(database_url.path.lstrip("/")),

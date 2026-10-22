@@ -11,6 +11,10 @@ dependencies = [
 
 [dependency-groups]
 dev = [
+    "detect-secrets==1.5.0",
+    "django-stubs==6.1.2",
+    "djangorestframework-stubs==3.18.1",
+    "mypy==2.4.0",
     "pip-audit==2.10.1",
     "ruff==0.17.1",
 ]
@@ -26,3 +30,16 @@ src = ["backend"]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B"]
+
+[tool.mypy]
+python_version = "3.14"
+files = ["backend", "infra/scan_secrets.py"]
+mypy_path = "backend"
+plugins = ["mypy_django_plugin.main", "mypy_drf_plugin.main"]
+check_untyped_defs = true
+warn_unused_ignores = true
+warn_redundant_casts = true
+explicit_package_bases = true
+
+[tool.django-stubs]
+django_settings_module = "config.settings.test"
