@@ -1,4 +1,4 @@
-name: Scaffold checks
+name: Quality checks
 
 on:
   push:
@@ -24,25 +24,20 @@ jobs:
           --health-cmd "pg_isready -U scaffold_test -d financial_services_test"
           --health-interval 5s --health-timeout 3s --health-retries 12
     env:
-      DATABASE_URL: postgresql://scaffold_test:${{ github.run_id }}-${{ github.run_attempt }}@127.0.0.1:5432/financial_services_test
-      DJANGO_ALLOWED_HOSTS: localhost,127.0.0.1,testserver
+      TEST_DATABASE_URL: postgresql://scaffold_test:${{ github.run_id }}-${{ github.run_attempt }}@127.0.0.1:5432/financial_services_test
     steps:
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
       - uses: astral-sh/setup-uv@94527f2e458b27549849d47d273a16bec83a01e9 # v7
         with:
           version: "0.13.2"
-      - name: Generate an ephemeral test secret
-        run: |
-          secret=$(openssl rand -hex 32)
-          echo "::add-mask::$secret"
-          echo "DJANGO_SECRET_KEY=$secret" >> "$GITHUB_ENV"
       - run: uv sync --locked
-      - run: uv run ruff check backend
-      - run: uv run ruff format --check backend
-      - run: uv run python backend/manage.py check
-      - run: uv run python backend/manage.py makemigrations --check --dry-run
-      - run: uv run python backend/manage.py migrate --noinput
-      - run: uv run python backend/manage.py test tests --verbosity 2
+      - run: uv run ruff check backend infra/scan_secrets.py
+      - run: uv run ruff format --check backend infra/scan_secrets.py
+      - run: uv run mypy
+      - run: uv run python backend/manage.py check --settings=config.settings.test
+      - run: uv run python backend/manage.py makemigrations --check --dry-run --settings=config.settings.test
+      - run: uv run python backend/manage.py migrate --noinput --settings=config.settings.test
+      - run: uv run python backend/manage.py test tests financial_services --settings=config.settings.test --noinput --verbosity 2
       - name: Audit all locked dependencies
         run: |
           mkdir -p .cache
@@ -67,19 +62,46 @@ jobs:
       - run: npm ci
       - run: npm run lint
       - run: npm run typecheck
+      - run: npm test
       - run: npm run build
       - run: npm run audit
+      - uses: astral-sh/setup-uv@94527f2e458b27549849d47d273a16bec83a01e9 # v7
+        with:
+          version: "0.13.2"
+      - name: Install the health API for the same-origin smoke test
+        working-directory: .
+        run: uv sync --locked --no-dev
       - name: Exercise the running frontend
+        env:
+          PYTHONPATH: ../backend
+          DJANGO_SETTINGS_MODULE: config.settings.test
+          SMOKE_TEST_URL: http://localhost:3000
+          SMOKE_TEST_API: "1"
+          API_INTERNAL_URL: http://127.0.0.1:8000
         run: |
+          uv run --no-sync python -c 'from wsgiref.simple_server import make_server; from config.wsgi import application; make_server("127.0.0.1", 8000, application).serve_forever()' > "$RUNNER_TEMP/health-api.log" 2>&1 &
+          api_pid=$!
           npm start > "$RUNNER_TEMP/scaffold-web.log" 2>&1 &
           web_pid=$!
-          trap 'kill "$web_pid"' EXIT
+          trap 'kill "$web_pid" "$api_pid"' EXIT
           for attempt in $(seq 1 30); do
-            if curl --fail --silent http://localhost:3000 > /dev/null; then
-              SMOKE_TEST_URL=http://localhost:3000 npm test
+            if curl --fail --silent http://localhost:3000 > /dev/null && curl --fail --silent http://127.0.0.1:8000/api/v1/health/live > /dev/null; then
+              npm run test:smoke
               exit 0
             fi
             sleep 1
           done
           cat "$RUNNER_TEMP/scaffold-web.log"
+          cat "$RUNNER_TEMP/health-api.log"
           exit 1
+
+  secrets:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+      - uses: astral-sh/setup-uv@94527f2e458b27549849d47d273a16bec83a01e9 # v7
+        with:
+          version: "0.13.2"
+      - run: uv sync --locked
+      - run: uv run python infra/scan_secrets.py

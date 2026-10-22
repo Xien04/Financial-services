@@ -2,6 +2,10 @@
 
 Scope: the initial Milestone 1 scaffold under ADRs 0001–0004. This is not
 acceptance of the complete application foundation or a production deployment.
+The subsequent automated-testing task is recorded separately in
+[testing verification](TESTING_VERIFICATION.md), including the new type checks,
+component tests, and working-tree secret scan. Statements below describe the
+initial scaffold snapshot rather than superseding that later evidence.
 
 ## Verified locally
 

@@ -2,8 +2,9 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 const origin = process.env.SMOKE_TEST_URL;
+assert.ok(origin, "Set SMOKE_TEST_URL to a running frontend before running test:smoke.");
 
-test("the running application serves an accessible starter page", { skip: !origin }, async () => {
+test("the running application serves the starter page semantics", async () => {
   const response = await fetch(origin);
   assert.equal(response.status, 200);
   const html = await response.text();
@@ -15,7 +16,7 @@ test("the running application serves an accessible starter page", { skip: !origi
 });
 
 test("same-origin API requests reach Django", {
-  skip: !origin || process.env.SMOKE_TEST_API !== "1",
+  skip: process.env.SMOKE_TEST_API !== "1",
 }, async () => {
   const response = await fetch(new URL("/api/v1/health/live", origin));
   assert.equal(response.status, 200);
