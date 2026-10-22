@@ -21,12 +21,12 @@ Normative words in this file have their ordinary standards meaning: **MUST** and
 
 The repository is in **Milestone 1 (application foundation)**. Milestone 0 was accepted and closed on 2026-09-18. A Django/DRF and Next.js scaffold, PostgreSQL Compose configuration, and initial checks now exist. Authentication, identity and ledger schemas, and core workflows remain unimplemented. See the roadmap for verification status; the scaffold does not complete Milestone 1.
 
-ADRs 0001–0003 were accepted by the product owner on 2026-09-18: the Django modular monolith (including the Next.js client, module ownership, and physical repository layout), the balanced ledger-entry model, and PostgreSQL. Financial semantics and product wireframes version 1.0 are also accepted. ADR 0004 records the 2026-10-22 scaffold tooling decision, including uv selected by the product owner. ADR 0005 records the automated quality-check tooling implemented in the authorized testing task.
+ADRs 0001–0003 were accepted by the product owner on 2026-09-18: the Django modular monolith (including the Next.js client, module ownership, and physical repository layout), the balanced ledger-entry model, and PostgreSQL. Financial semantics and product wireframes version 1.0 are also accepted. ADR 0004 records the 2026-10-22 scaffold tooling decision, including uv selected by the product owner. ADR 0005 records the automated quality-check tooling implemented in the authorized testing task. ADR 0006 was accepted by Brenson Go on 2026-10-22 and governs Django/PostgreSQL browser sessions, authentication lifecycle, initial owner provisioning, and workspace role permissions; implementation remains outstanding.
 
 Consequently:
 
 - The modular monolith, ledger-entry model, and PostgreSQL are binding. Changing any of them requires a superseding ADR.
-- Every other choice in `docs/PRODUCT_ARCHITECTURE.md` (for example authentication/session strategy, Celery and Redis, API conventions, object storage) remains a recommendation until its own ADR is accepted. MUST NOT describe those as accepted.
+- Choices in `docs/PRODUCT_ARCHITECTURE.md` not covered by an accepted ADR (for example Celery and Redis, detailed API conventions, and object storage) remain recommendations until their own ADRs are accepted. Authentication/session strategy and role permissions follow [ADR 0006](docs/adr/0006-use-django-sessions-for-browser-authentication.md). MUST NOT describe unresolved choices as accepted.
 - MUST NOT silently replace the planned stack or architecture with alternatives.
 - MUST add an ADR before making a material technical decision that the accepted ADRs do not already cover.
 - MUST implement debit/credit and UI signs, lifecycle transitions, financial dates, month boundaries, rounding, currency precision, and executable metric formulas according to the accepted `docs/FINANCIAL_SEMANTICS.md`. Do not change them implicitly in code or an unrelated ADR.
