@@ -50,6 +50,12 @@ Accepted and closed by Brenson Go on 2026-09-18.
 - [ ] Add CI, Docker Compose, health endpoints, structured redacted logs, backups, and a restore runbook.
 - [ ] Add secret scanning and verify no credentials exist in the current tree or published history.
 
+Authentication and initial identity/workspace code is implemented under ADRs
+0006–0007. The related delivery checkboxes remain open until PostgreSQL migration,
+integration/concurrency, actual mail delivery, and complete browser workflow
+verification pass. See [setup](AUTHENTICATION.md) and
+[verification](AUTHENTICATION_VERIFICATION.md). No financial workflow is added.
+
 ### Dependencies
 
 - Milestone 0 financial conventions accepted.

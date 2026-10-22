@@ -4,7 +4,7 @@ from unittest.mock import patch
 from django.core.exceptions import ImproperlyConfigured
 from django.test import SimpleTestCase
 
-from config.settings.base import csv_setting, required
+from config.settings.base import csv_setting, positive_int, required
 
 
 class EnvironmentConfigurationTests(SimpleTestCase):
@@ -27,3 +27,13 @@ class EnvironmentConfigurationTests(SimpleTestCase):
     def test_absent_optional_lists_are_empty(self):
         with patch.dict(os.environ, {}, clear=True):
             self.assertEqual(csv_setting("SETTING_UNDER_TEST"), [])
+
+    def test_optional_positive_integers_use_defaults_for_blank_values(self):
+        with patch.dict(os.environ, {"SETTING_UNDER_TEST": ""}):
+            self.assertEqual(positive_int("SETTING_UNDER_TEST", 5), 5)
+
+    def test_invalid_positive_integers_fail_closed(self):
+        for value in ("0", "-1", "invalid"):
+            with self.subTest(value=value), patch.dict(os.environ, {"SETTING_UNDER_TEST": value}):
+                with self.assertRaises(ImproperlyConfigured):
+                    positive_int("SETTING_UNDER_TEST", 5)

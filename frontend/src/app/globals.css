@@ -14,3 +14,19 @@ p { overflow-wrap: anywhere; }
 .skip-link { position: absolute; top: -5rem; left: 1rem; padding: .75rem; background: white; color: var(--ink); }
 .skip-link:focus { top: .5rem; }
 :focus-visible { outline: 3px solid #216c53; outline-offset: 4px; }
+.auth-card { max-width: 36rem; margin: 0 auto; }
+.auth-card h1 { font-size: clamp(2rem, 5vw, 3rem); }
+fieldset { border: 0; padding: 0; margin: 0; min-width: 0; }
+label { display: block; font-weight: 600; margin-top: 1.25rem; }
+input { display: block; width: 100%; min-height: 3rem; margin-top: .4rem; padding: .7rem; border: 1px solid #81958b; border-radius: .45rem; font: inherit; background: white; color: var(--ink); }
+button { min-height: 3rem; margin-top: 1.5rem; padding: .7rem 1.2rem; background: #205d48; color: white; border: 1px solid #205d48; border-radius: .45rem; font: inherit; font-weight: 600; cursor: pointer; }
+button:disabled { opacity: .65; cursor: wait; }
+.secondary { background: white; color: #205d48; }
+a { color: #205d48; text-underline-offset: .2em; }
+.account-links { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 1.5rem; }
+.form-error, .form-success { padding: 1rem; border-radius: .45rem; }
+.form-error { color: #7a2522; background: #fff0ef; border: 1px solid #aa524c; }
+.form-success { background: #e6f3eb; border: 1px solid #417b59; }
+.operator-help { color: #475e54; font-size: .9rem; margin-top: 2rem; }
+.password-heading { margin-top: 3rem; }
+.visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }

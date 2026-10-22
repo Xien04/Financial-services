@@ -8,6 +8,7 @@ from rest_framework.views import APIView
 
 
 class LiveView(APIView):
+    authentication_classes = []
     permission_classes = [AllowAny]
 
     def get(self, request: Request) -> Response:
@@ -15,6 +16,7 @@ class LiveView(APIView):
 
 
 class ReadyView(APIView):
+    authentication_classes = []
     permission_classes = [AllowAny]
 
     def get(self, request: Request) -> Response:

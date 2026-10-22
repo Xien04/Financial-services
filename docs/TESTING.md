@@ -40,6 +40,13 @@ for interactive development. HTTP startup tests are deliberately separate.
 
 ## PostgreSQL integration and migrations
 
+Authentication scenarios in `tests.integration.test_identity` include concurrent
+reset reuse, owner provisioning, shared rate counters, session lifecycle, and
+workspace policy checks. They require PostgreSQL; component tests and mocked
+database-free CSRF tests do not prove these persistence guarantees. See
+[authentication operation](AUTHENTICATION.md) and
+[verification](AUTHENTICATION_VERIFICATION.md).
+
 Use PostgreSQL 17, matching Compose and CI. Supply `TEST_DATABASE_URL` in your
 process environment, pointing to a **dedicated disposable test instance** with a
 role allowed to create databases. Use a separate test database and credentials;
