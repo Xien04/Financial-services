@@ -2,7 +2,7 @@
 
 This document tracks delivery. Update a checkbox only when its acceptance criteria are met, and record intentionally postponed scope under **Deferred work** instead of leaving its status ambiguous.
 
-Status legend: `[x]` complete, `[ ]` not complete. The milestone named **Current** is the active planning focus. Initial application scaffolding is in progress; incomplete checks and milestone gates remain open.
+Status legend: `[x]` complete, `[ ]` not complete. The milestone named **Current** is the active planning focus. Application foundation is in progress; incomplete checks and milestone gates remain open.
 
 ## Milestone 0 — Product and accounting definitions (Complete)
 
@@ -40,13 +40,13 @@ Accepted and closed by Brenson Go on 2026-09-18.
 ### Features and tasks
 
 - [x] Record ADRs for the modular monolith, ledger-entry model, and PostgreSQL.
-- [ ] Scaffold Django, Django REST Framework, Next.js, and TypeScript projects.
-- [ ] Lock production and development dependencies; add automated dependency scanning.
-- [ ] Add PostgreSQL migrations, UUID conventions, and environment-specific settings.
+- [x] Scaffold Django, Django REST Framework, Next.js, and TypeScript projects.
+- [x] Lock production and development dependencies; add automated dependency scanning.
+- [x] Add PostgreSQL migrations, UUID conventions, and environment-specific settings.
 - [ ] Implement email/password authentication and password reset.
 - [ ] Implement workspaces, membership roles, and reusable authorization policies.
 - [ ] Establish versioned API, OpenAPI generation, validation, errors, request IDs, and idempotency conventions.
-- [ ] Add formatting, linting, unit-test, integration-test, and type-check commands.
+- [x] Add formatting, linting, unit-test, integration-test, and type-check commands.
 - [ ] Add CI, Docker Compose, health endpoints, structured redacted logs, backups, and a restore runbook.
 - [ ] Add secret scanning and verify no credentials exist in the current tree or published history.
 
@@ -56,6 +56,13 @@ CI. The related delivery checkboxes remain open pending actual mail delivery,
 complete browser workflows, and production proxy verification. See
 [setup](AUTHENTICATION.md) and
 [verification](AUTHENTICATION_VERIFICATION.md). No financial workflow is added.
+
+Issue #11's full Compose verification passed in hosted Linux CI on 2026-10-27:
+fresh image builds/startup, application-role migrations and permissions, runtime
+users/ports, database-outage health checks, and identity persistence after restart.
+See [Compose verification](COMPOSE_VERIFICATION.md) for the exact environment and
+evidence. Browser/SMTP, shared API conventions, structured logs, production
+operations, backup/restore, and historical secret verification remain open.
 
 ### Dependencies
 
@@ -270,6 +277,7 @@ complete browser workflows, and production proxy verification. See
 
 ## Completed work
 
+- 2026-10-27: Completed issue #11's Compose verification in GitHub Actions and corrected the API image PATH so documented `python manage.py` commands use its installed virtualenv. The full Compose job and all existing quality/security jobs passed, including 62 backend tests. See [Compose verification](COMPOSE_VERIFICATION.md). This does not close the remaining Milestone 1 gates.
 - 2026-10-27: Fixed PR #10's stale-user password-reset test setup. Hosted CI passed PostgreSQL migrations, all 55 backend tests, 15 frontend tests, lint/type/build/HTTP checks, both dependency audits, and working-tree secret scanning. See [authentication verification](AUTHENTICATION_VERIFICATION.md); actual SMTP/browser workflows, local Compose, and production operations remain open.
 - 2026-10-22: Implemented authentication, UUID identity/workspace schemas, initial owner provisioning, workspace policies, and rate limiting under ADRs 0006–0007. Brenson Go accepted ADR 0006 covering browser sessions, recovery lifetimes, and role permissions. Verification status is recorded in [authentication verification](AUTHENTICATION_VERIFICATION.md).
 - 2026-10-22: Implemented isolated Django test settings, backend type checking, frontend component tests, fail-on-missing-target HTTP smoke checks, working-tree secret scanning, and their CI commands under ADR 0005. See the historical [testing verification](TESTING_VERIFICATION.md) and the 2026-10-27 hosted evidence above; broad milestone gates stay open.
@@ -287,7 +295,7 @@ complete browser workflows, and production proxy verification. See
 
 - Automated-testing follow-up: review historical secrets separately from working-tree scanning and add full browser and accounting/property tests with their owning workflows. Identity/tenant integration tests now pass in hosted PostgreSQL CI. See [testing guide](TESTING.md).
 
-- The initial scaffold uses ADR 0004 tooling and committed uv/npm locks. Hosted PostgreSQL/CI verification passes; full local Compose startup and initialization role grants remain unverified. Milestone 1 checkboxes remain open pending their full criteria.
+- The initial scaffold uses ADR 0004 tooling and committed uv/npm locks. Hosted PostgreSQL and full Compose verification now pass, including initialization grants, application-role migrations, runtime boundaries, and persistence. The Windows host remains without Docker; the recorded full-stack evidence is from Linux CI. Remaining Milestone 1 checkboxes stay open pending their full criteria.
 - Actual SMTP/browser authentication, production-edge verification, full API/OpenAPI/idempotency conventions, historical secret review, structured logging, production serving, and backup/restore drills remain Milestone 1 work. Rate-limit thresholds and implementation are recorded in ADR 0007.
 - Architecture choices not covered by an accepted ADR (for example Celery and Redis, detailed API conventions, and object storage) remain recommendations in the architecture document until their own ADRs are accepted.
 - Bank feeds, brokerage accounting, real-time pricing, advanced multi-currency accounting, tax preparation, money movement, credit monitoring, and AI-generated advice are outside MVP.

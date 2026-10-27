@@ -11,12 +11,13 @@ familiar transaction interface.
 scaffold, six module packages, local Compose configuration, and startup checks are
 present. Email/password authentication, recovery, UUID identity models, initial
 owner provisioning, and workspace policy services are implemented. PostgreSQL
-migrations and integration tests pass in hosted CI; local Compose startup,
-complete browser workflows, and SMTP delivery remain unverified. Ledger models and
+migrations, integration tests, and the full Compose setup pass in hosted Linux CI.
+Complete browser workflows and SMTP delivery remain unverified. Ledger models and
 financial workflows are not implemented. This environment is for local development. See the
 [roadmap](docs/ROADMAP.md) and [tooling ADR](docs/adr/0004-use-uv-and-foundation-tooling.md).
-Local check results and remaining verification are recorded in
-[scaffold verification](docs/SCAFFOLD_VERIFICATION.md).
+Current full-stack evidence is recorded in
+[Compose verification](docs/COMPOSE_VERIFICATION.md); the original scaffold
+snapshot remains in [scaffold verification](docs/SCAFFOLD_VERIFICATION.md).
 
 ## Toolchain and layout
 
@@ -192,8 +193,7 @@ Authentication/session strategy and role permissions are accepted in
 with implementation details in [ADR 0007](docs/adr/0007-implement-authentication-rate-limits.md).
 Identity and authentication code now exists, with verification limitations in
 [authentication verification](docs/AUTHENTICATION_VERIFICATION.md).
-Milestone 1 still needs full local Compose verification,
-detailed API/OpenAPI/idempotency conventions, complete browser and SMTP
+Milestone 1 still needs detailed API/OpenAPI/idempotency conventions, complete browser and SMTP
 workflow tests, historical secret scanning, structured logging, production
 hosting, and documented backup/restore drills. Foundation checks alone do not
 complete the milestone.
@@ -207,3 +207,4 @@ complete the milestone.
 - [Architecture decision records](docs/adr/README.md)
 - [Testing and quality checks](docs/TESTING.md)
 - [Authentication setup and operation](docs/AUTHENTICATION.md)
+- [Full Compose verification and evidence](docs/COMPOSE_VERIFICATION.md)

@@ -173,7 +173,8 @@ timeouts. Backend CI provisions PostgreSQL 17; the frontend job runs component
 tests and a production build before both HTTP smoke checks. The separate secret
 job scans the checked-out working tree. The Compose job separately exercises
 the actual images, initialization script, application-role migrations, runtime
-boundaries, failure health checks, and persistence. See
+boundaries, failure health checks, and persistence. Its first full run passed on
+2026-10-27. See
 [COMPOSE_VERIFICATION.md](COMPOSE_VERIFICATION.md) for its observed status.
 
 Local evidence and outstanding verification are recorded in
