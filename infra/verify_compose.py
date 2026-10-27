@@ -300,7 +300,7 @@ class ComposeVerification:
                     raise VerificationError("Database unexpectedly publishes a host port.")
             else:
                 assert port is not None
-                if bindings.get(port) != [{"HostIp": "127.0.0.1", "HostPort": port.split("/")[0]}]:
+                if bindings != {port: [{"HostIp": "127.0.0.1", "HostPort": port.split("/")[0]}]}:
                     raise VerificationError(
                         f"{service} must bind only its documented loopback port."
                     )

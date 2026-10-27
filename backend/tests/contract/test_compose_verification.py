@@ -45,7 +45,7 @@ class ComposeVerificationSafetyTests(SimpleTestCase):
         for name in ("DATABASE_URL", "POSTGRES_PASSWORD", "COMPOSE_FILE", "COMPOSE_PROJECT_NAME"):
             self.assertNotIn(name, result)
 
-    def test_shared_or_external_resources_cannot_authorize_cleanup(self):
+    def test_shared_resources_and_unsafe_port_bindings_are_rejected(self):
         baseline = {
             "name": "isolated",
             "services": {name: {} for name in ("db", "api", "web")},
@@ -60,6 +60,20 @@ class ComposeVerificationSafetyTests(SimpleTestCase):
                     verification.validate_project(config, "isolated")
         with self.assertRaises(verification.VerificationError):
             verification.validate_project(baseline | {"name": "another-project"}, "isolated")
+        checker = self.make_verifier()
+        valid_api = {"8000/tcp": [{"HostIp": "127.0.0.1", "HostPort": "8000"}]}
+        for bindings in (
+            {},
+            {"8000/tcp": [{"HostIp": "0.0.0.0", "HostPort": "8000"}]},
+            valid_api | {"9000/tcp": [{"HostIp": "0.0.0.0", "HostPort": "9000"}]},
+        ):
+            with (
+                self.subTest(bindings=bindings),
+                patch.object(checker, "compose", return_value="a" * 64),
+                patch.object(checker, "command", return_value=json.dumps(bindings)),
+                self.assertRaises(verification.VerificationError),
+            ):
+                checker.runtime_boundaries()
 
     def test_existing_project_resources_are_preserved(self):
         checker = self.make_verifier()

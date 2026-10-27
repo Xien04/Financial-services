@@ -23,9 +23,17 @@ also passed all 29 recorded commands and final cleanup from a clean checkout.
 It used Docker 29.4.2 and Compose 5.1.3 on Linux x86_64 with glibc 2.43; API/web
 user IDs were 10001/1000, and PostgreSQL had no published port. The checked-out
 merge commit was `f803bf5`, for source `b95d4d1`. Because the issue names a Compose
-v2 baseline, CI now explicitly selects Compose v2.40.3 through the official,
-commit-pinned Docker setup action. Verification of that baseline is pending its
-first run; the results above describe the newer runner-default plugin.
+v2 baseline, CI explicitly selects Compose v2.40.3 through the official,
+commit-pinned Docker setup action.
+
+[The pinned v2 baseline run](https://github.com/Xien04/Financial-services/actions/runs/40571266554)
+passed all four jobs, all six acceptance checks, all 29 recorded commands, and
+final cleanup. Its report records Docker 29.4.2, Compose 2.40.3, and Linux x86_64
+with glibc 2.43. Runtime checks ran from 19:40:53 to 19:42:51 UTC on 2026-10-27,
+tested merge commit `41a8a79` for source `e79271a`, with tester `Compose
+verification automation`. The JSON evidence is available in the Compose job's
+logs and run summary. Both the stated v2 baseline and the newer runner-default
+plugin have therefore exercised the same real Compose stack.
 
 The same run passed all 62 backend tests (including seven harness safety/syntax
 checks), 15 frontend component/transport tests, both existing HTTP smoke tests,
