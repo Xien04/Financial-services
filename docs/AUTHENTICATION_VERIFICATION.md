@@ -61,8 +61,10 @@ PostgreSQL evidence comes from hosted CI, not a local database or SQLite.
 ## Unverified or blocked
 
 - **Local PostgreSQL and full Compose startup:** no local PostgreSQL service or
-  Docker is available. Hosted migration/integration results above do not verify
-  local container builds, initialization role grants, or the full Compose stack.
+  Docker is available on the Windows host. The complete Compose stack, actual
+  images, and initialization/application-role grants now pass a separate hosted
+  Linux run for issue #11; see [Compose verification](COMPOSE_VERIFICATION.md).
+  Those results do not claim execution on this Windows host.
 - **Actual email delivery:** SMTP is operator-configured and was not exercised.
   CI verifies email content and sanitized delivery failures through the in-memory
   test backend; that does not prove SMTP delivery.

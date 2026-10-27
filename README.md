@@ -11,12 +11,13 @@ familiar transaction interface.
 scaffold, six module packages, local Compose configuration, and startup checks are
 present. Email/password authentication, recovery, UUID identity models, initial
 owner provisioning, and workspace policy services are implemented. PostgreSQL
-migrations and integration tests pass in hosted CI; local Compose startup,
-complete browser workflows, and SMTP delivery remain unverified. Ledger models and
+migrations, integration tests, and the full Compose setup pass in hosted Linux CI.
+Complete browser workflows and SMTP delivery remain unverified. Ledger models and
 financial workflows are not implemented. This environment is for local development. See the
 [roadmap](docs/ROADMAP.md) and [tooling ADR](docs/adr/0004-use-uv-and-foundation-tooling.md).
-Local check results and remaining verification are recorded in
-[scaffold verification](docs/SCAFFOLD_VERIFICATION.md).
+Current full-stack evidence is recorded in
+[Compose verification](docs/COMPOSE_VERIFICATION.md); the original scaffold
+snapshot remains in [scaffold verification](docs/SCAFFOLD_VERIFICATION.md).
 
 ## Toolchain and layout
 
@@ -89,6 +90,33 @@ Rebuild changes with `docker compose up -d --build`. Stop with
 `docker compose down`; this preserves the database volume. The containers use
 development servers and are not a production deployment.
 
+### Verify the complete Compose setup
+
+From a clean checkout with Docker running, Compose v2 available, and ports
+3000/8000 free, run:
+
+```powershell
+uv run --locked python infra/verify_compose.py
+```
+
+The check follows the startup sequence above using a separately named Compose
+project and freshly generated credentials copied into a temporary configuration
+from `.env.example`. It ignores application/Compose variables inherited from your
+shell and does not read your local `.env`. It builds the actual images, migrates
+with the application role, checks UUIDs/permissions and runtime port/user
+boundaries, exercises health forwarding and a database outage, and checks that
+synthetic owner/workspace records survive a stop and restart. Provisioning in
+this automated check calls the existing identity service; the interactive
+`provision_owner` command above remains the normal operator procedure.
+
+The final cleanup removes only this check's disposable project and database
+volume. Existing application projects and volumes are preserved; occupied ports
+or an unexpected existing verification project cause an early failure.
+Sanitized evidence is written to `.cache/compose-verification.json`. A `compose`
+job runs the same check from a fresh GitHub Actions checkout and publishes the
+report in the run summary. See [Compose verification](docs/COMPOSE_VERIFICATION.md)
+for the acceptance scope, evidence, and remaining limits.
+
 ## Host development tools
 
 Install [uv](https://docs.astral.sh/uv/getting-started/installation/) 0.13.2 and
@@ -98,8 +126,8 @@ the executable. From the repository root:
 ```powershell
 uv sync --locked
 npm --prefix frontend ci
-uv run ruff check backend infra/scan_secrets.py
-uv run ruff format --check backend infra/scan_secrets.py
+uv run ruff check backend infra
+uv run ruff format --check backend infra
 uv run mypy
 npm --prefix frontend test
 npm --prefix frontend run lint
@@ -165,8 +193,7 @@ Authentication/session strategy and role permissions are accepted in
 with implementation details in [ADR 0007](docs/adr/0007-implement-authentication-rate-limits.md).
 Identity and authentication code now exists, with verification limitations in
 [authentication verification](docs/AUTHENTICATION_VERIFICATION.md).
-Milestone 1 still needs full local Compose verification,
-detailed API/OpenAPI/idempotency conventions, complete browser and SMTP
+Milestone 1 still needs detailed API/OpenAPI/idempotency conventions, complete browser and SMTP
 workflow tests, historical secret scanning, structured logging, production
 hosting, and documented backup/restore drills. Foundation checks alone do not
 complete the milestone.
@@ -180,3 +207,4 @@ complete the milestone.
 - [Architecture decision records](docs/adr/README.md)
 - [Testing and quality checks](docs/TESTING.md)
 - [Authentication setup and operation](docs/AUTHENTICATION.md)
+- [Full Compose verification and evidence](docs/COMPOSE_VERIFICATION.md)

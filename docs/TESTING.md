@@ -17,8 +17,8 @@ are committed; new direct dependencies must have exact versions and a concrete u
 ## Fast checks: no running application or database required
 
 ```powershell
-uv run ruff check backend infra/scan_secrets.py
-uv run ruff format --check backend infra/scan_secrets.py
+uv run ruff check backend infra
+uv run ruff format --check backend infra
 uv run mypy
 uv run python backend/manage.py check --settings=config.settings.test
 uv run python backend/manage.py test tests.unit tests.contract --settings=config.settings.test --verbosity 2
@@ -73,6 +73,30 @@ PostgreSQL. Ledger schemas and accounting tests remain future work; identity and
 readiness checks do not establish financial correctness.
 
 ## HTTP startup checks
+
+### Full Docker Compose verification
+
+Run `uv run --locked python infra/verify_compose.py` from a clean checkout with
+Docker/Compose v2 available and loopback ports 3000/8000 free. Unlike the
+frontend-only HTTP check below, this builds the actual Compose images, initializes
+a fresh PostgreSQL volume, runs the README migration command using the application
+role, checks runtime users/ports and permission failures, exercises healthy and
+unavailable-database responses, and verifies identity persistence after restart.
+
+It generates a separate project and temporary credentials without reading local
+`.env` or inheriting application/Compose configuration. Final cleanup removes only
+the check's disposable resources. The JSON evidence contains commands, exit
+codes, tool versions, environment, tested commit, HTTP outcomes, and the
+`M1-ENV-01` through `M1-ENV-06` results. It contains no credential values or raw
+identity records. Review the README and dated verification record alongside the
+automation evidence before marking the documentation criterion complete.
+
+The `compose` CI job executes this same script and publishes sanitized JSON in
+the job summary. Backend contract tests also cover credential isolation, refusal
+to reuse shared/existing resources, failure redaction, and cleanup boundaries.
+These safety tests do not claim Docker runtime evidence.
+
+### Frontend HTTP smoke checks
 
 With the frontend and API already running:
 
@@ -143,11 +167,15 @@ tests when those flows exist. No numeric coverage target has been adopted.
 
 ## CI and verification status
 
-`.github/workflows/scaffold.yml` contains backend, frontend, and secret-scan jobs.
+`.github/workflows/scaffold.yml` contains backend, frontend, Compose, and secret-scan jobs.
 Jobs use locked installs, pinned Actions, read-only repository access, and bounded
 timeouts. Backend CI provisions PostgreSQL 17; the frontend job runs component
 tests and a production build before both HTTP smoke checks. The separate secret
-job scans the checked-out working tree.
+job scans the checked-out working tree. The Compose job separately exercises
+the actual images, initialization script, application-role migrations, runtime
+boundaries, failure health checks, and persistence. Its first full run passed on
+2026-10-27. See
+[COMPOSE_VERIFICATION.md](COMPOSE_VERIFICATION.md) for its observed status.
 
 Local evidence and outstanding verification are recorded in
 [TESTING_VERIFICATION.md](TESTING_VERIFICATION.md) for the original testing task
