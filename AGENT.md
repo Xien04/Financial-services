@@ -19,14 +19,16 @@ Normative words in this file have their ordinary standards meaning: **MUST** and
 
 ## Decision status: do not overstate it
 
-The repository is in **Milestone 1 (application foundation)**. Milestone 0 was accepted and closed on 2026-09-18. A Django/DRF and Next.js scaffold, PostgreSQL Compose configuration, and checks exist. Authentication, UUID identity/workspace schemas, initial owner provisioning, and internal workspace policies are implemented. PostgreSQL migrations/integration tests and the complete Compose setup pass in hosted Linux CI; Docker remains unavailable on the Windows host. Browser/SMTP verification, shared API conventions, structured logs, production operations, backup/restore, and historical secret verification remain open. Ledger schemas and financial workflows remain unimplemented. See the roadmap, `docs/AUTHENTICATION_VERIFICATION.md`, and `docs/COMPOSE_VERIFICATION.md`; implementation does not complete Milestone 1.
+The repository is in **Milestone 1 (application foundation)**. Milestone 0 was accepted and closed on 2026-09-18. A Django/DRF and Next.js scaffold, PostgreSQL Compose configuration, and checks exist. Authentication, UUID identity/workspace schemas, initial owner provisioning, and internal workspace policies are implemented. PostgreSQL migrations/integration tests and the complete Compose setup pass in hosted Linux CI; Docker remains unavailable on the Windows host. Browser/SMTP verification, shared API implementation, structured logs, production operations, backup/restore, and historical secret verification remain open. Ledger schemas and financial workflows remain unimplemented. See the roadmap, `docs/AUTHENTICATION_VERIFICATION.md`, and `docs/COMPOSE_VERIFICATION.md`; implementation does not complete Milestone 1.
 
 ADRs 0001–0003 were accepted by the product owner on 2026-09-18: the Django modular monolith (including the Next.js client, module ownership, and physical repository layout), the balanced ledger-entry model, and PostgreSQL. Financial semantics and product wireframes version 1.0 are also accepted. ADR 0004 records the 2026-10-22 scaffold tooling decision, including uv selected by the product owner. ADR 0005 records the automated quality-check tooling implemented in the authorized testing task. ADR 0006 was accepted by Brenson Go on 2026-10-22 and governs Django/PostgreSQL browser sessions, authentication lifecycle, initial owner provisioning, and workspace role permissions. ADR 0007 records the implementation's PostgreSQL rate limiter, thresholds, and browser protections.
+
+Brenson Go accepted ADRs [0008](docs/adr/0008-standardize-api-contracts.md) and [0009](docs/adr/0009-make-financial-writes-idempotent.md) on 2026-10-27. They govern shared validation/errors, server-generated request IDs, implementation-generated OpenAPI, cursor pagination, and durable financial idempotency. Issue #14 implements applicable current API contracts, including the schema-tool compatibility gate. Real financial posting enforcement and concurrency evidence remain Milestone 2 work; acceptance does not claim implementation is complete.
 
 Consequently:
 
 - The modular monolith, ledger-entry model, and PostgreSQL are binding. Changing any of them requires a superseding ADR.
-- Choices in `docs/PRODUCT_ARCHITECTURE.md` not covered by an accepted ADR (for example Celery and Redis, detailed API conventions, and object storage) remain recommendations until their own ADRs are accepted. Authentication/session strategy and role permissions follow [ADR 0006](docs/adr/0006-use-django-sessions-for-browser-authentication.md). MUST NOT describe unresolved choices as accepted.
+- Choices in `docs/PRODUCT_ARCHITECTURE.md` not covered by an accepted ADR (for example Celery and Redis, and object storage) remain recommendations until their own ADRs are accepted. Authentication/session strategy and role permissions follow [ADR 0006](docs/adr/0006-use-django-sessions-for-browser-authentication.md); API and financial retry contracts follow ADRs 0008–0009. MUST NOT describe unresolved choices as accepted.
 - MUST NOT silently replace the planned stack or architecture with alternatives.
 - MUST add an ADR before making a material technical decision that the accepted ADRs do not already cover.
 - MUST implement debit/credit and UI signs, lifecycle transitions, financial dates, month boundaries, rounding, currency precision, and executable metric formulas according to the accepted `docs/FINANCIAL_SEMANTICS.md`. Do not change them implicitly in code or an unrelated ADR.
@@ -170,6 +172,7 @@ The workspace is both the tenant and authorization boundary.
 
 ## API contract
 
+- Follow accepted [ADR 0008](docs/adr/0008-standardize-api-contracts.md) for HTTP validation/errors, request IDs, OpenAPI, and pagination, and [ADR 0009](docs/adr/0009-make-financial-writes-idempotent.md) for financial operation identities, replay, concurrency, failure, and retention. These are binding decisions; implementation status remains in the roadmap.
 - APIs MUST be versioned under `/api/v1` unless an accepted ADR changes the convention.
 - OpenAPI documentation MUST be generated from the implementation and updated with contract changes.
 - Use consistent error envelopes, request IDs, cursor pagination for large ledgers, and idempotency keys for posting operations.

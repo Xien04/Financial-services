@@ -193,7 +193,11 @@ Authentication/session strategy and role permissions are accepted in
 with implementation details in [ADR 0007](docs/adr/0007-implement-authentication-rate-limits.md).
 Identity and authentication code now exists, with verification limitations in
 [authentication verification](docs/AUTHENTICATION_VERIFICATION.md).
-Milestone 1 still needs detailed API/OpenAPI/idempotency conventions, complete browser and SMTP
+Shared API and financial idempotency decisions were accepted by Brenson Go on
+2026-10-27 in [ADR 0008](docs/adr/0008-standardize-api-contracts.md) and
+[ADR 0009](docs/adr/0009-make-financial-writes-idempotent.md). Their acceptance
+records the contracts; implementation remains in issue #14 and the ledger milestone.
+Milestone 1 still needs API/OpenAPI implementation, complete browser and SMTP
 workflow tests, historical secret scanning, structured logging, production
 hosting, and documented backup/restore drills. Foundation checks alone do not
 complete the milestone.
