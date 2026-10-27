@@ -64,6 +64,14 @@ See [Compose verification](COMPOSE_VERIFICATION.md) for the exact environment an
 evidence. Browser/SMTP, shared API conventions, structured logs, production
 operations, backup/restore, and historical secret verification remain open.
 
+Issue #12's API decision proposal is available for product-owner review in
+[ADR 0008](adr/0008-standardize-api-contracts.md) and
+[ADR 0009](adr/0009-make-financial-writes-idempotent.md). Both remain **Proposed**;
+no acceptance or API implementation completion is claimed. After explicit
+acceptance, #14 implements the applicable current API conventions and #15 uses
+the request-ID contract. Actual financial posting/retry enforcement remains a
+Milestone 2 responsibility.
+
 ### Dependencies
 
 - Milestone 0 financial conventions accepted.
