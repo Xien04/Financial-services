@@ -11,8 +11,14 @@ test("the running application serves the starter page semantics", async () => {
   assert.match(html, /<html[^>]*lang="en"/);
   assert.match(html, /href="#main"/);
   assert.match(html, /<main id="main"/);
-  assert.match(html, /<h1[^>]*>A clearer view of your money\./);
+  assert.match(html, /Checking your session/);
   assert.doesNotMatch(html, /₱0\.00/);
+  const policy = response.headers.get("content-security-policy");
+  assert.ok(policy);
+  const nonce = /'nonce-([^']+)'/.exec(policy)?.[1];
+  assert.ok(nonce);
+  assert.ok(html.includes(`nonce="${nonce}"`));
+  assert.match(response.headers.get("cache-control"), /no-store/);
 });
 
 test("same-origin API requests reach Django", {

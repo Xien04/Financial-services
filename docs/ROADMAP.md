@@ -50,6 +50,13 @@ Accepted and closed by Brenson Go on 2026-09-18.
 - [ ] Add CI, Docker Compose, health endpoints, structured redacted logs, backups, and a restore runbook.
 - [ ] Add secret scanning and verify no credentials exist in the current tree or published history.
 
+Authentication and initial identity/workspace code is implemented under ADRs
+0006–0007. PostgreSQL migrations and integration/concurrency tests pass in hosted
+CI. The related delivery checkboxes remain open pending actual mail delivery,
+complete browser workflows, and production proxy verification. See
+[setup](AUTHENTICATION.md) and
+[verification](AUTHENTICATION_VERIFICATION.md). No financial workflow is added.
+
 ### Dependencies
 
 - Milestone 0 financial conventions accepted.
@@ -263,8 +270,9 @@ Accepted and closed by Brenson Go on 2026-09-18.
 
 ## Completed work
 
-- 2026-10-22: Brenson Go accepted [ADR 0006](adr/0006-use-django-sessions-for-browser-authentication.md) covering Django/PostgreSQL browser sessions, session and password-recovery lifetimes, initial owner provisioning without public registration, and workspace role permissions. Authentication implementation and its verification remain outstanding.
-- 2026-10-22: Implemented isolated Django test settings, backend type checking, frontend component tests, fail-on-missing-target HTTP smoke checks, working-tree secret scanning, and their CI commands under ADR 0005. See [testing verification](TESTING_VERIFICATION.md); a hosted CI run and local PostgreSQL verification remain outstanding, so broad milestone gates stay open.
+- 2026-10-27: Fixed PR #10's stale-user password-reset test setup. Hosted CI passed PostgreSQL migrations, all 55 backend tests, 15 frontend tests, lint/type/build/HTTP checks, both dependency audits, and working-tree secret scanning. See [authentication verification](AUTHENTICATION_VERIFICATION.md); actual SMTP/browser workflows, local Compose, and production operations remain open.
+- 2026-10-22: Implemented authentication, UUID identity/workspace schemas, initial owner provisioning, workspace policies, and rate limiting under ADRs 0006–0007. Brenson Go accepted ADR 0006 covering browser sessions, recovery lifetimes, and role permissions. Verification status is recorded in [authentication verification](AUTHENTICATION_VERIFICATION.md).
+- 2026-10-22: Implemented isolated Django test settings, backend type checking, frontend component tests, fail-on-missing-target HTTP smoke checks, working-tree secret scanning, and their CI commands under ADR 0005. See the historical [testing verification](TESTING_VERIFICATION.md) and the 2026-10-27 hosted evidence above; broad milestone gates stay open.
 
 - 2026-09-18: Brenson Go accepted the MVP boundaries and success criteria and closed Milestone 0. Milestone 1 is now current.
 - 2026-09-18: Brenson Go accepted ADRs 0001–0003 (Django modular monolith and repository layout, balanced ledger-entry model, PostgreSQL).
@@ -277,9 +285,9 @@ Accepted and closed by Brenson Go on 2026-09-18.
 
 ## Deferred work
 
-- Automated-testing follow-up: verify the hosted PostgreSQL/CI run, review historical secrets separately from working-tree scanning, and add browser, tenant-isolation, and accounting/property tests with their owning workflows. See [testing guide](TESTING.md). These are not covered by the foundation component/health tests.
+- Automated-testing follow-up: review historical secrets separately from working-tree scanning and add full browser and accounting/property tests with their owning workflows. Identity/tenant integration tests now pass in hosted PostgreSQL CI. See [testing guide](TESTING.md).
 
-- The initial scaffold uses ADR 0004 tooling and committed uv/npm locks. Full Compose startup, PostgreSQL integration verification, and the first hosted CI run must be confirmed before scaffold delivery is marked complete. Milestone 1 checkboxes remain open pending their full criteria.
-- Authentication/session implementation under accepted ADR 0006, UUID identity/workspace schemas, full API/OpenAPI/idempotency conventions, browser workflow tests, historical secret review, structured logging, production serving, and backup/restore drills remain separate Milestone 1 work. Rate-limit thresholds and implementation must be recorded before authentication endpoints ship.
+- The initial scaffold uses ADR 0004 tooling and committed uv/npm locks. Hosted PostgreSQL/CI verification passes; full local Compose startup and initialization role grants remain unverified. Milestone 1 checkboxes remain open pending their full criteria.
+- Actual SMTP/browser authentication, production-edge verification, full API/OpenAPI/idempotency conventions, historical secret review, structured logging, production serving, and backup/restore drills remain Milestone 1 work. Rate-limit thresholds and implementation are recorded in ADR 0007.
 - Architecture choices not covered by an accepted ADR (for example Celery and Redis, detailed API conventions, and object storage) remain recommendations in the architecture document until their own ADRs are accepted.
 - Bank feeds, brokerage accounting, real-time pricing, advanced multi-currency accounting, tax preparation, money movement, credit monitoring, and AI-generated advice are outside MVP.

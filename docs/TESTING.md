@@ -40,6 +40,13 @@ for interactive development. HTTP startup tests are deliberately separate.
 
 ## PostgreSQL integration and migrations
 
+Authentication scenarios in `tests.integration.test_identity` include concurrent
+reset reuse, owner provisioning, shared rate counters, session lifecycle, and
+workspace policy checks. They require PostgreSQL; component tests and mocked
+database-free CSRF tests do not prove these persistence guarantees. See
+[authentication operation](AUTHENTICATION.md) and
+[verification](AUTHENTICATION_VERIFICATION.md).
+
 Use PostgreSQL 17, matching Compose and CI. Supply `TEST_DATABASE_URL` in your
 process environment, pointing to a **dedicated disposable test instance** with a
 role allowed to create databases. Use a separate test database and credentials;
@@ -60,10 +67,10 @@ Without a URL, the test settings use an uncredentialed loopback test database,
 allowing unit/contract tests to start; integration tests fail if PostgreSQL is
 unavailable. They are not silently skipped or replaced with SQLite.
 
-The current database integration test exercises the readiness endpoint with a
-real PostgreSQL connection. No identity or ledger migrations exist yet. Adding
-schema or domain behavior must add the corresponding tests rather than treating
-the readiness test as evidence of accounting or tenant correctness.
+The database suite exercises readiness, identity migrations, session/password
+lifecycle, workspace authorization, and concurrent identity operations against
+PostgreSQL. Ledger schemas and accounting tests remain future work; identity and
+readiness checks do not establish financial correctness.
 
 ## HTTP startup checks
 
@@ -143,7 +150,9 @@ tests and a production build before both HTTP smoke checks. The separate secret
 job scans the checked-out working tree.
 
 Local evidence and outstanding verification are recorded in
-[TESTING_VERIFICATION.md](TESTING_VERIFICATION.md). A parsed workflow is not a
-successful hosted run; PostgreSQL integration checks remain unverified locally
-on a machine without PostgreSQL/Docker. Authentication, accounting, browser flows,
-historical secret review, and backup/restore remain separate milestone work.
+[TESTING_VERIFICATION.md](TESTING_VERIFICATION.md) for the original testing task
+and [AUTHENTICATION_VERIFICATION.md](AUTHENTICATION_VERIFICATION.md) for the
+successful hosted PostgreSQL/CI run observed on 2026-10-27. PostgreSQL integration
+checks remain unverified locally on this machine without PostgreSQL/Docker.
+Actual SMTP delivery, complete browser flows, accounting, historical secret
+review, and backup/restore remain separate milestone work.

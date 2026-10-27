@@ -22,3 +22,6 @@ from .base import DATABASES
 
 # Django creates/destroys this separate database, not the source database in the URL.
 DATABASES["default"]["TEST"] = {"NAME": "test_financial_services"}
+EMAIL_BACKEND = "django.core.mail.backends.locmem.EmailBackend"
+APP_URL = "https://finance.example.test"
+DEFAULT_FROM_EMAIL = "no-reply@example.test"

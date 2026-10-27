@@ -15,6 +15,9 @@ class ConfigurationTests(SimpleTestCase):
             DATABASE_URL="postgresql://127.0.0.1/financial_services",
             DJANGO_ALLOWED_HOSTS="localhost",
             DJANGO_CSRF_TRUSTED_ORIGINS="https://localhost",
+            APP_URL="https://localhost",
+            EMAIL_HOST="mail.example.test",
+            DEFAULT_FROM_EMAIL="no-reply@example.test",
         )
         environment.update(overrides)
         return subprocess.run(

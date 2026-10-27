@@ -215,16 +215,20 @@ authentication mechanism through a new or superseding ADR.
 - [x] Product owner accepts this ADR.
 - [x] Confirm session timeouts, reset-link lifetime, and role permissions.
 - [x] Confirm initial owner provisioning and disabled public registration.
-- [ ] Record implementation tasks for identity models, authentication, recovery, authorization, and deployment.
-- [ ] Define tests for CSRF, cookie behavior, session rotation, expiration, logout, and password-related revocation.
-- [ ] Define tests for inactive users, rate limiting, and reset-link expiration and reuse.
-- [ ] Define tests proving cross-workspace access fails and membership changes take effect.
-- [ ] Define tests preventing removal or demotion of the final owner.
+- [x] Record implementation tasks for identity models, authentication, recovery, authorization, and deployment.
+- [x] Define tests for CSRF, cookie behavior, session rotation, expiration, logout, and password-related revocation.
+- [x] Define tests for inactive users, rate limiting, and reset-link expiration and reuse.
+- [x] Define tests proving cross-workspace access fails and membership changes take effect.
+- [x] Define tests preventing removal or demotion of the final owner.
 
 Accepted by Brenson Go on 2026-10-22 after reviewing the proposed ADR. Acceptance
 records the architecture decision. It does not mark authentication implementation
-or Milestone 1 complete. Implementation planning and verification tasks above
-remain open.
+or Milestone 1 complete. Follow-up on 2026-10-22: implementation and test
+definitions now exist, with rate-limit details in [ADR 0007](0007-implement-authentication-rate-limits.md)
+and setup/deployment tasks in [authentication operation](../AUTHENTICATION.md).
+Defined tests are not passing evidence: PostgreSQL execution, SMTP delivery, and
+complete deployment verification remain open in
+[authentication verification](../AUTHENTICATION_VERIFICATION.md).
 
 ## References
 

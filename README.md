@@ -9,8 +9,11 @@ familiar transaction interface.
 
 **Milestone 1 — application foundation.** The Django/REST API and Next.js/TypeScript
 scaffold, six module packages, local Compose configuration, and startup checks are
-present. Authentication, UUID identity models, ledger models, and workflows are not
-implemented. This scaffold is for local development. See the
+present. Email/password authentication, recovery, UUID identity models, initial
+owner provisioning, and workspace policy services are implemented. PostgreSQL
+migrations and integration tests pass in hosted CI; local Compose startup,
+complete browser workflows, and SMTP delivery remain unverified. Ledger models and
+financial workflows are not implemented. This environment is for local development. See the
 [roadmap](docs/ROADMAP.md) and [tooling ADR](docs/adr/0004-use-uv-and-foundation-tooling.md).
 Local check results and remaining verification are recorded in
 [scaffold verification](docs/SCAFFOLD_VERIFICATION.md).
@@ -70,8 +73,12 @@ Open [the application](http://localhost:3000). The API exposes
 readiness returns HTTP 503 while the database is unavailable, without exception
 details. Next.js forwards `/api/*` to Django on the private Compose network.
 
-Migrations are explicit. No application models or migrations exist yet. Identity
-work must establish a UUID user model before Django auth migrations are introduced.
+Migrations are explicit. The initial identity migration establishes the UUID user
+model before sessions/authentication are used. After migrating, run
+`docker compose run --rm api python manage.py provision_owner` in an interactive
+terminal to create the first account and personal workspace. Public registration
+is disabled. See [authentication setup](docs/AUTHENTICATION.md) for password
+recovery, SMTP configuration, session maintenance, and operator recovery.
 The application role can create schema objects but cannot administer PostgreSQL.
 Initialization runs only when the data volume is empty; changing `.env` does not
 rotate credentials on an existing database. Use a database role-management
@@ -139,7 +146,9 @@ page; `API_INTERNAL_URL` defaults to `http://127.0.0.1:8000`.
 The quality CI workflow defines formatting/linting, backend and frontend type
 checks, PostgreSQL migrations and backend tests, frontend component/build/startup
 checks, dependency audits, and working-tree secret scanning.
-Its first hosted run still needs verification. Run audits locally with:
+Hosted checks passed on 2026-10-27; see
+[authentication verification](docs/AUTHENTICATION_VERIFICATION.md) for evidence
+and remaining limits. Run audits locally with:
 
 ```powershell
 New-Item -ItemType Directory -Force .cache | Out-Null
@@ -152,9 +161,12 @@ npm --prefix frontend run audit
 installation workflow. Exported requirements are ignored tool output.
 
 Authentication/session strategy and role permissions are accepted in
-[ADR 0006](docs/adr/0006-use-django-sessions-for-browser-authentication.md);
-their implementation remains outstanding. Milestone 1 still needs UUID identity and
-workspace permissions, detailed API/OpenAPI/idempotency conventions, browser
+[ADR 0006](docs/adr/0006-use-django-sessions-for-browser-authentication.md),
+with implementation details in [ADR 0007](docs/adr/0007-implement-authentication-rate-limits.md).
+Identity and authentication code now exists, with verification limitations in
+[authentication verification](docs/AUTHENTICATION_VERIFICATION.md).
+Milestone 1 still needs full local Compose verification,
+detailed API/OpenAPI/idempotency conventions, complete browser and SMTP
 workflow tests, historical secret scanning, structured logging, production
 hosting, and documented backup/restore drills. Foundation checks alone do not
 complete the milestone.
@@ -167,3 +179,4 @@ complete the milestone.
 - [Delivery roadmap](docs/ROADMAP.md)
 - [Architecture decision records](docs/adr/README.md)
 - [Testing and quality checks](docs/TESTING.md)
+- [Authentication setup and operation](docs/AUTHENTICATION.md)

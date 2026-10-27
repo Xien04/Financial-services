@@ -18,3 +18,4 @@ Each ADR should record the status, context, decision, consequences, and date. De
 | [0004 — Use uv and the foundation toolchain](0004-use-uv-and-foundation-tooling.md) | Accepted 2026-10-22 |
 | [0005 — Establish automated quality checks](0005-establish-automated-quality-checks.md) | Accepted for implementation 2026-10-22 |
 | [0006 — Use Django sessions for browser authentication](0006-use-django-sessions-for-browser-authentication.md) | Accepted 2026-10-22 |
+| [0007 — Implement shared authentication rate limits and browser protections](0007-implement-authentication-rate-limits.md) | Accepted for implementation 2026-10-22 |

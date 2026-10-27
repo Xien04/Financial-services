@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import "./globals.css";
 
+// Per-request CSP nonces must also be present on Next.js's generated scripts.
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Financial Services",
   description: "A private place to understand your money.",
