@@ -220,9 +220,10 @@ ADR 0005 extends that toolchain with mypy and Django/DRF stubs, Vitest and React
 Testing Library component tests, isolated test settings, and working-tree secret
 scanning. Use [docs/TESTING.md](docs/TESTING.md) for the current commands and
 scope. Backend type checking and current-tree scanning are now implemented;
-full browser workflow coverage, historical scanning, and verification of hosted
-CI remain outstanding. No numeric coverage target or strict Python type-hint
-policy is selected. Never claim a missing or unrun gate passes.
+full browser workflow coverage and historical scanning remain outstanding.
+Hosted PostgreSQL/CI checks passed on 2026-10-27; see
+`docs/AUTHENTICATION_VERIFICATION.md`. No numeric coverage target or strict Python
+type-hint policy is selected. Never claim a missing or unrun gate passes.
 
 Once commands exist, every change MUST run all relevant checks. In addition:
 

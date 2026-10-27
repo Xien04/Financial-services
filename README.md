@@ -10,8 +10,9 @@ familiar transaction interface.
 **Milestone 1 — application foundation.** The Django/REST API and Next.js/TypeScript
 scaffold, six module packages, local Compose configuration, and startup checks are
 present. Email/password authentication, recovery, UUID identity models, initial
-owner provisioning, and workspace policy services are implemented; PostgreSQL
-integration and SMTP delivery verification remain outstanding. Ledger models and
+owner provisioning, and workspace policy services are implemented. PostgreSQL
+migrations and integration tests pass in hosted CI; local Compose startup,
+complete browser workflows, and SMTP delivery remain unverified. Ledger models and
 financial workflows are not implemented. This environment is for local development. See the
 [roadmap](docs/ROADMAP.md) and [tooling ADR](docs/adr/0004-use-uv-and-foundation-tooling.md).
 Local check results and remaining verification are recorded in
@@ -145,7 +146,9 @@ page; `API_INTERNAL_URL` defaults to `http://127.0.0.1:8000`.
 The quality CI workflow defines formatting/linting, backend and frontend type
 checks, PostgreSQL migrations and backend tests, frontend component/build/startup
 checks, dependency audits, and working-tree secret scanning.
-Its first hosted run still needs verification. Run audits locally with:
+Hosted checks passed on 2026-10-27; see
+[authentication verification](docs/AUTHENTICATION_VERIFICATION.md) for evidence
+and remaining limits. Run audits locally with:
 
 ```powershell
 New-Item -ItemType Directory -Force .cache | Out-Null
@@ -162,8 +165,8 @@ Authentication/session strategy and role permissions are accepted in
 with implementation details in [ADR 0007](docs/adr/0007-implement-authentication-rate-limits.md).
 Identity and authentication code now exists, with verification limitations in
 [authentication verification](docs/AUTHENTICATION_VERIFICATION.md).
-Milestone 1 still needs verified PostgreSQL migrations and authentication/tenant
-integration tests, detailed API/OpenAPI/idempotency conventions, complete browser
+Milestone 1 still needs full local Compose verification,
+detailed API/OpenAPI/idempotency conventions, complete browser and SMTP
 workflow tests, historical secret scanning, structured logging, production
 hosting, and documented backup/restore drills. Foundation checks alone do not
 complete the milestone.
