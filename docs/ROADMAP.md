@@ -61,16 +61,17 @@ Issue #11's full Compose verification passed in hosted Linux CI on 2026-10-27:
 fresh image builds/startup, application-role migrations and permissions, runtime
 users/ports, database-outage health checks, and identity persistence after restart.
 See [Compose verification](COMPOSE_VERIFICATION.md) for the exact environment and
-evidence. Browser/SMTP, shared API conventions, structured logs, production
+evidence. Browser/SMTP, shared API implementation, structured logs, production
 operations, backup/restore, and historical secret verification remain open.
 
-Issue #12's API decision proposal is available for product-owner review in
+Brenson Go accepted issue #12's API and idempotency decisions on 2026-10-27 in
 [ADR 0008](adr/0008-standardize-api-contracts.md) and
-[ADR 0009](adr/0009-make-financial-writes-idempotent.md). Both remain **Proposed**;
-no acceptance or API implementation completion is claimed. After explicit
-acceptance, #14 implements the applicable current API conventions and #15 uses
-the request-ID contract. Actual financial posting/retry enforcement remains a
-Milestone 2 responsibility.
+[ADR 0009](adr/0009-make-financial-writes-idempotent.md), explicitly confirming:
+"Both documents are accepted." PR #21 records that acceptance and closes #12
+when merged. #14 implements the applicable current API conventions, including the
+OpenAPI tooling compatibility check; #15 uses the request-ID contract. Actual
+financial posting/retry enforcement remains a Milestone 2 responsibility. API
+implementation and the combined Milestone 1 feature checkbox remain incomplete.
 
 ### Dependencies
 
@@ -304,6 +305,6 @@ Milestone 2 responsibility.
 - Automated-testing follow-up: review historical secrets separately from working-tree scanning and add full browser and accounting/property tests with their owning workflows. Identity/tenant integration tests now pass in hosted PostgreSQL CI. See [testing guide](TESTING.md).
 
 - The initial scaffold uses ADR 0004 tooling and committed uv/npm locks. Hosted PostgreSQL and full Compose verification now pass, including initialization grants, application-role migrations, runtime boundaries, and persistence. The Windows host remains without Docker; the recorded full-stack evidence is from Linux CI. Remaining Milestone 1 checkboxes stay open pending their full criteria.
-- Actual SMTP/browser authentication, production-edge verification, full API/OpenAPI/idempotency conventions, historical secret review, structured logging, production serving, and backup/restore drills remain Milestone 1 work. Rate-limit thresholds and implementation are recorded in ADR 0007.
-- Architecture choices not covered by an accepted ADR (for example Celery and Redis, detailed API conventions, and object storage) remain recommendations in the architecture document until their own ADRs are accepted.
+- Actual SMTP/browser authentication, production-edge verification, API/OpenAPI implementation, historical secret review, structured logging, production serving, and backup/restore drills remain Milestone 1 work. Rate-limit thresholds and implementation are recorded in ADR 0007. API and financial idempotency contracts are accepted in ADRs 0008–0009; actual financial posting enforcement remains Milestone 2 work.
+- Architecture choices not covered by an accepted ADR (for example Celery and Redis, and object storage) remain recommendations in the architecture document until their own ADRs are accepted.
 - Bank feeds, brokerage accounting, real-time pricing, advanced multi-currency accounting, tax preparation, money movement, credit monitoring, and AI-generated advice are outside MVP.

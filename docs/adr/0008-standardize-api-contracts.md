@@ -2,20 +2,20 @@
 
 | Field | Value |
 |---|---|
-| Status | Proposed — awaiting product-owner review |
+| Status | Accepted |
 | Date | 2026-10-27 |
 | Decision owners | Brenson Go (product owner) and engineering |
-| Accepted by | Not yet accepted |
+| Accepted by | Brenson Go on 2026-10-27 |
 | Related work | [Decision issue #12](https://github.com/Xien04/Financial-services/issues/12), [implementation #14](https://github.com/Xien04/Financial-services/issues/14), [logging #15](https://github.com/Xien04/Financial-services/issues/15) |
-| Related records | [ADR 0001](0001-use-django-modular-monolith.md), [ADR 0006](0006-use-django-sessions-for-browser-authentication.md), [ADR 0007](0007-implement-authentication-rate-limits.md), [proposed ADR 0009](0009-make-financial-writes-idempotent.md) |
+| Related records | [ADR 0001](0001-use-django-modular-monolith.md), [ADR 0006](0006-use-django-sessions-for-browser-authentication.md), [ADR 0007](0007-implement-authentication-rate-limits.md), [ADR 0009](0009-make-financial-writes-idempotent.md) |
 
-## Proposal in plain language
+## Decision in plain language
 
 Give the application one set of rules for explaining mistakes, tracing requests,
 describing its API, and showing long lists. Keep the existing login and health
 behavior compatible while adding those rules.
 
-| Choice to review | Recommendation | Example |
+| Topic | Decision | Example |
 |---|---|---|
 | Error messages | One predictable JSON format with a safe message and a stable error code | A missing email identifies the email field |
 | Tracking requests | Django creates a fresh tracking UUID for every attempt | A user can report the tracking number of a failed save |
@@ -23,8 +23,9 @@ behavior compatible while adding those rules.
 | Long lists | Cursor pagination; 50 items by default, at most 100 | Load the next group without counting past thousands of entries |
 | Page expiration | A page cursor expires after 24 hours | Restart the list if its old bookmark has expired |
 
-Everything below is a recommendation for review. No API behavior, dependency,
-accepted ADR, or milestone completion is changed by adding this document.
+The product owner accepted these rules on 2026-10-27. Acceptance records the
+architecture decision; API behavior, dependencies, and milestone completion
+still require the implementation and verification described below.
 
 ## Context
 
@@ -36,9 +37,9 @@ generated OpenAPI, or pagination implementation exists.
 
 Issue #12 needs explicit decisions before #14 implements these conventions.
 Financial rules remain governed by the accepted financial semantics and ledger
-ADRs; this proposal defines their HTTP representation and shared boundaries.
+ADRs; this decision defines their HTTP representation and shared boundaries.
 
-## Proposed decision
+## Decision
 
 ### 1. Preserve the versioned JSON boundary
 
@@ -187,7 +188,7 @@ is visible between requests. A snapshot/export protocol needs its own decision.
 No current route needs pagination: health and authentication return singleton
 results. Keep `/auth/me`'s current embedded workspace membership representation;
 revisit it when a real membership-list workflow exists. #14 must not invent a
-financial list endpoint or an unused database model to demonstrate this proposal.
+financial list endpoint or an unused database model to demonstrate this contract.
 
 ## Examples to turn into contract tests in #14
 
@@ -213,7 +214,7 @@ this document does not claim those tests exist or pass.
 
 - **Keep endpoint-specific errors:** less initial work, but every client must
   guess how to interpret validation and framework failures.
-- **RFC 9457 Problem Details:** a valid standard alternative. The proposed small
+- **RFC 9457 Problem Details:** a valid standard alternative. The selected small
   JSON envelope preserves the client's existing `detail` access and keeps one
   media type. It is deliberately not described as RFC 9457 compliant.
 - **DRF's built-in OpenAPI generator / handwritten schemas:** upstream deprecates
@@ -239,14 +240,19 @@ Milestone 1 checkboxes and #12 acceptance IDs open until their own gates are met
 
 ## Acceptance record
 
-- [ ] Brenson Go accepts the error envelope, validation rules, and status choices.
-- [ ] Brenson Go accepts server-generated request IDs and incoming-ID replacement.
-- [ ] Brenson Go accepts the OpenAPI tool, compatibility gate, and publication scope.
-- [ ] Brenson Go accepts pagination defaults, ordering, cursor binding, and expiry.
-- [ ] Record explicit acceptance/date and link the accepted record from #12/#14.
+- [x] Brenson Go accepts the error envelope, validation rules, and status choices.
+- [x] Brenson Go accepts server-generated request IDs and incoming-ID replacement.
+- [x] Brenson Go accepts the OpenAPI tool, compatibility gate, and publication scope.
+- [x] Brenson Go accepts pagination defaults, ordering, cursor binding, and expiry.
+- [x] Record explicit acceptance/date and link the accepted record from #12/#14.
 
-No acceptance has been recorded. Proposed numbers and tradeoffs may be revised
-during review; approval of this document does not claim implementation is complete.
+Accepted by Brenson Go on 2026-10-27 after reviewing ADRs 0008–0009 in
+[PR #21](https://github.com/Xien04/Financial-services/pull/21). The product owner's
+explicit confirmation was: "Both documents are accepted."
+
+This accepts the decision, including the tooling compatibility gate. It does not
+claim implementation or Milestone 1 is complete. Issue #12 remains open until
+PR #21 is merged; #14 implements the applicable current API conventions.
 
 ## References
 

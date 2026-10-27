@@ -2,21 +2,21 @@
 
 | Field | Value |
 |---|---|
-| Status | Proposed — awaiting product-owner review |
+| Status | Accepted |
 | Date | 2026-10-27 |
 | Decision owners | Brenson Go (product owner) and engineering |
-| Accepted by | Not yet accepted |
+| Accepted by | Brenson Go on 2026-10-27 |
 | Related work | [Decision issue #12](https://github.com/Xien04/Financial-services/issues/12), [API foundation #14](https://github.com/Xien04/Financial-services/issues/14), Milestones 2 and 4 |
-| Related records | [ADR 0002](0002-use-ledger-entry-model.md), [ADR 0003](0003-use-postgresql.md), [proposed ADR 0008](0008-standardize-api-contracts.md), [financial semantics](../FINANCIAL_SEMANTICS.md) |
+| Related records | [ADR 0002](0002-use-ledger-entry-model.md), [ADR 0003](0003-use-postgresql.md), [ADR 0008](0008-standardize-api-contracts.md), [financial semantics](../FINANCIAL_SEMANTICS.md) |
 
-## Proposal in plain language
+## Decision in plain language
 
 If you save a PHP 100.00 expense and lose your connection, trying that same save
 again must return its original result. It must never create a second expense.
 Each intended action has one operation key. A new expense gets a new key; a retry
 keeps the old key. A tracking/request ID identifies each individual attempt.
 
-| Choice to review | Recommendation |
+| Topic | Decision |
 |---|---|
 | Same key and same intended action | Return the original successful receipt |
 | Same key with a changed amount or other meaningful input | Reject the conflict; do not silently overwrite |
@@ -25,8 +25,9 @@ keeps the old key. A tracking/request ID identifies each individual attempt.
 | A retry months later | Retained financial operation identity still prevents another posting |
 | Retention | Keep a small operation record with the financial history; do not store a second full financial response |
 
-This is a proposed contract. It adds no ledger table, endpoint, dependency, or
-runtime behavior and does not complete issue #12 before owner acceptance.
+The product owner accepted this contract on 2026-10-27. Acceptance adds no ledger
+table, endpoint, dependency, or runtime behavior. Actual financial enforcement
+and its PostgreSQL evidence belong to the owning implementation milestones.
 
 ## Context
 
@@ -36,7 +37,7 @@ and workers. A disabled Save button alone cannot enforce those requirements.
 Requests can overlap, responses can be lost after a commit, and workers can run
 again after restarting. Expiring a response cache must not allow a second posting.
 
-## Proposed decision
+## Decision
 
 ### 1. Identify an intended operation separately from an HTTP request
 
@@ -265,13 +266,18 @@ evidence that a financial posting is balanced, authorized, or safe to retry.
 
 ## Acceptance record
 
-- [ ] Brenson Go accepts key scope, command matching, and conflict behavior.
-- [ ] Brenson Go accepts PostgreSQL atomicity, concurrent-attempt, and failure rules.
-- [ ] Brenson Go accepts original receipt/status replay and current authorization checks.
-- [ ] Brenson Go accepts identity retention with financial history and the recovery-gap limitation.
-- [ ] Record explicit acceptance/date and link the accepted record from #12/#14.
+- [x] Brenson Go accepts key scope, command matching, and conflict behavior.
+- [x] Brenson Go accepts PostgreSQL atomicity, concurrent-attempt, and failure rules.
+- [x] Brenson Go accepts original receipt/status replay and current authorization checks.
+- [x] Brenson Go accepts identity retention with financial history and the recovery-gap limitation.
+- [x] Record explicit acceptance/date and link the accepted record from #12/#14.
 
-No acceptance has been recorded. Issue #12 and milestone gates remain open.
+Accepted by Brenson Go on 2026-10-27 after reviewing ADRs 0008–0009 in
+[PR #21](https://github.com/Xien04/Financial-services/pull/21). The product owner's
+explicit confirmation was: "Both documents are accepted."
+
+Issue #12 remains open until PR #21 is merged. Milestone gates remain open;
+this acceptance does not claim financial posting or retry protection is implemented.
 
 ## References
 
