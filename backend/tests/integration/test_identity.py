@@ -55,6 +55,8 @@ class AuthenticationIntegrationTests(TestCase):
         )
 
     def reset_values(self):
+        # Login updates last_login through a separate user instance.
+        self.user.refresh_from_db()
         return {
             "uid": urlsafe_base64_encode(force_bytes(self.user.pk)),
             "token": default_token_generator.make_token(self.user),
@@ -135,7 +137,7 @@ class AuthenticationIntegrationTests(TestCase):
             self.assertEqual(browser.get("/api/v1/auth/me").status_code, 403)
 
     def test_reset_is_single_use_revokes_sessions_and_does_not_login(self):
-        self.login()
+        self.assertEqual(self.login().status_code, 200)
         values = self.reset_values()
         other = Client(enforce_csrf_checks=True)
         self.assertEqual(self.post(other, "password/reset", values).status_code, 200)
