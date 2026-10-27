@@ -111,7 +111,7 @@ jobs:
         run: |
           if test -f .cache/compose-verification.json; then
             printf '### Compose verification evidence\n\n```json\n' >> "$GITHUB_STEP_SUMMARY"
-            cat .cache/compose-verification.json >> "$GITHUB_STEP_SUMMARY"
+            tee -a "$GITHUB_STEP_SUMMARY" < .cache/compose-verification.json
             printf '\n```\n' >> "$GITHUB_STEP_SUMMARY"
           fi
 
