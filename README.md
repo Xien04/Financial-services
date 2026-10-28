@@ -197,6 +197,11 @@ Shared API and financial idempotency decisions were accepted by Brenson Go on
 2026-10-27 in [ADR 0008](docs/adr/0008-standardize-api-contracts.md) and
 [ADR 0009](docs/adr/0009-make-financial-writes-idempotent.md). Their acceptance
 records the contracts; implementation remains in issue #14 and the ledger milestone.
+Retention/closure and backup/recovery policies were accepted on 2026-10-28 in
+[ADR 0010](docs/adr/0010-define-data-retention-and-deletion.md) and
+[ADR 0011](docs/adr/0011-define-backup-and-recovery-targets.md). Issue #18 implements
+and measures the backup procedure; the one-hour data-loss and four-hour recovery
+targets are policy requirements, not achieved verification results.
 Milestone 1 still needs API/OpenAPI implementation, complete browser and SMTP
 workflow tests, historical secret scanning, structured logging, production
 hosting, and documented backup/restore drills. Foundation checks alone do not

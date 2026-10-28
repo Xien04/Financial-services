@@ -190,17 +190,20 @@ continues under its own policy and must not delete these identities.
 
 Cleanup may remove transient request context after the transaction; PostgreSQL
 releases transaction locks automatically. Archive/void retains the identity.
-Future erasure of a workspace and its financial records must follow the accepted
-retention/deletion policy from [#13](https://github.com/Xien04/Financial-services/issues/13).
-This ADR chooses no statutory retention period and authorizes no deletion.
-Until that policy is accepted, do not purge successful financial identities.
+Workspace closure and profile minimization follow the accepted
+[retention/closure policy in ADR 0010](0010-define-data-retention-and-deletion.md),
+recorded through [#13](https://github.com/Xien04/Financial-services/issues/13).
+That policy permits no automatic financial-history or successful-identity purge.
+Neither ADR chooses a statutory retention period or authorizes irreversible
+financial erasure; such a change requires an explicit revised decision.
 
 Back up and restore identities with their financial results in the same
 consistent PostgreSQL recovery point. This prevents replay of operations present
 in a restored database. It cannot recover operations lost after an older backup:
 after such a restore, pause financial writes/import workers and reconcile the
-recovery gap before accepting outstanding retries. #13/#18 must specify that
-operational recovery gate; never claim idempotency alone eliminates recovery loss.
+recovery gap before accepting outstanding retries.
+[ADR 0011](0011-define-backup-and-recovery-targets.md) specifies that operational
+recovery gate; #18 implements it. Never claim idempotency alone eliminates recovery loss.
 
 ### 7. Keep transport retries distinct from business duplicate detection
 
@@ -253,7 +256,7 @@ or claims that ledger tests already run.
 ## Consequences and delivery boundary
 
 Durable metadata grows with successful financial operations and must remain
-consistent with backups and future deletion policy. Stable receipts deliberately
+consistent with backups and the accepted retention policy. Stable receipts deliberately
 describe the original operation rather than the current resource. Clients must
 preserve operation keys across uncertain outcomes; changing a key is a new action.
 

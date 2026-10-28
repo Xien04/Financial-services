@@ -73,6 +73,16 @@ OpenAPI tooling compatibility check; #15 uses the request-ID contract. Actual
 financial posting/retry enforcement remains a Milestone 2 responsibility. API
 implementation and the combined Milestone 1 feature checkbox remain incomplete.
 
+The product owner requested issue #13's policy decisions before further feature
+implementation. Brenson Go accepted the retention/closure policy in
+[ADR 0010](adr/0010-define-data-retention-and-deletion.md) and backup/recovery
+policy in [ADR 0011](adr/0011-define-backup-and-recovery-targets.md) on 2026-10-28,
+explicitly confirming: "both files are accepted." The policy PR records these
+decisions and closes #13 when merged. #18 then implements the backup/restore
+procedure and measured drill, including the one-hour RPO/four-hour RTO targets.
+No retention job, deletion workflow, backup, or achieved recovery target is
+claimed by policy acceptance. Milestone 1 completion checkboxes remain open.
+
 ### Dependencies
 
 - Milestone 0 financial conventions accepted.
