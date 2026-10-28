@@ -1,9 +1,11 @@
 import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import AuthScreen from "./auth-screen";
-import { authAction, currentAccount } from "./api";
+import { ApiError, authAction, currentAccount } from "./api";
 
-vi.mock("./api", () => ({ currentAccount: vi.fn(), authAction: vi.fn() }));
+vi.mock("./api", async (importOriginal) => ({
+  ...await importOriginal<typeof import("./api")>(), currentAccount: vi.fn(), authAction: vi.fn(),
+}));
 const account = { id: "user-id", email: "owner@example.test", display_name: "Owner", timezone: "Asia/Manila",
   workspaces: [{ id: "workspace-id", name: "Personal", role: "owner" }] };
 
@@ -37,6 +39,17 @@ describe("authentication workflows", () => {
     expect(screen.getByRole("button", { name: "Sign in" })).toBeEnabled();
   });
 
+  it("marks declared fields and displays the correlated support reference", async () => {
+    const requestId = "3fbbcd4f-b207-4712-bcbd-1b55da617db6";
+    vi.mocked(authAction).mockRejectedValue(new ApiError("Check the highlighted fields.",
+      "validation_error", [{ path: "/email", code: "invalid", message: "Enter a valid value." }], requestId));
+    render(<AuthScreen />);
+    await fillLogin();
+    expect(await screen.findByRole("alert")).toHaveTextContent(requestId);
+    expect(screen.getByLabelText(/Email address/)).toHaveAttribute("aria-invalid", "true");
+    expect(screen.getByLabelText(/Email address/)).toHaveAccessibleDescription("Enter a valid value.");
+  });
+
   it("disables repeated submissions while login is pending", async () => {
     let finish: (value: object) => void = () => {};
     vi.mocked(authAction).mockImplementation(() => new Promise((resolve) => { finish = resolve; }));
@@ -65,6 +78,7 @@ describe("authentication workflows", () => {
     fireEvent.click(screen.getByRole("button", { name: "Reset password" }));
     expect(await screen.findByRole("status")).toHaveTextContent("Password reset");
     expect(authAction).toHaveBeenCalledWith("password/reset", expect.objectContaining({ uid: "encoded-user", token: "reset-value" }));
+    expect(vi.mocked(authAction).mock.calls.at(-1)?.[1]).not.toHaveProperty("confirm_password");
     expect(screen.queryByLabelText("New password")).not.toBeInTheDocument();
   });
 

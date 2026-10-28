@@ -35,6 +35,7 @@ jobs:
       - run: uv run ruff format --check backend infra
       - run: uv run mypy
       - run: uv run python backend/manage.py check --settings=config.settings.test
+      - run: uv run python infra/check_api_schema.py
       - run: uv run python backend/manage.py makemigrations --check --dry-run --settings=config.settings.test
       - run: uv run python backend/manage.py migrate --noinput --settings=config.settings.test
       - run: uv run python backend/manage.py test tests financial_services --settings=config.settings.test --noinput --verbosity 2

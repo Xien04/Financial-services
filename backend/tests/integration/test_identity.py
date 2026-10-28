@@ -1,9 +1,11 @@
 """Acceptance scenarios from ADR 0006. Run against disposable PostgreSQL only."""
 
+import json
 import secrets
 import time
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timedelta
+from pathlib import Path
 from threading import Barrier
 from unittest.mock import patch
 
@@ -18,6 +20,7 @@ from django.test import Client, TestCase, TransactionTestCase, override_settings
 from django.utils import timezone
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
+from jsonschema import Draft4Validator, FormatChecker
 from rest_framework.exceptions import Throttled
 
 from financial_services.identity import services
@@ -62,6 +65,63 @@ class AuthenticationIntegrationTests(TestCase):
             "token": default_token_generator.make_token(self.user),
             "new_password": secrets.token_urlsafe(32),
         }
+
+    def test_authenticated_and_recovery_responses_match_the_generated_contract(self):
+        schema = json.loads(
+            (Path(__file__).resolve().parents[3] / "docs/api/openapi.json").read_text(
+                encoding="utf-8"
+            )
+        )
+
+        def check(route, method, response):
+            documented = schema["paths"][f"/api/v1/auth/{route}"][method]["responses"][
+                str(response.status_code)
+            ]
+            self.assertTrue(response["X-Request-ID"])
+            if response.status_code == 204:
+                self.assertEqual(response.content, b"")
+                self.assertNotIn("content", documented)
+            else:
+                definition = documented["content"]["application/json"]["schema"]
+                Draft4Validator(
+                    {**definition, "components": schema["components"]},
+                    format_checker=FormatChecker(),
+                ).validate(response.json())
+
+        check("login", "post", self.login())
+        check("me", "get", self.browser.get("/api/v1/auth/me"))
+        check("activity", "post", self.post(self.browser, "activity", {}))
+        check(
+            "password/recover",
+            "post",
+            self.post(self.browser, "password/recover", {"email": "unknown@example.test"}),
+        )
+        check(
+            "password/change",
+            "post",
+            self.post(
+                self.browser,
+                "password/change",
+                {
+                    "current_password": secrets.token_urlsafe(32),
+                    "new_password": secrets.token_urlsafe(32),
+                },
+            ),
+        )
+        check(
+            "password/reset",
+            "post",
+            self.post(
+                self.browser,
+                "password/reset",
+                {
+                    "uid": "invalid",
+                    "token": "invalid",
+                    "new_password": secrets.token_urlsafe(32),
+                },
+            ),
+        )
+        check("logout", "post", self.post(self.browser, "logout", {}))
 
     def test_login_rotates_session_and_csrf_then_logout_revokes_server_session(self):
         previous = self.browser.session

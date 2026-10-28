@@ -224,5 +224,6 @@ Start ordinary work from current `origin/main` and target `main` in the PR.
 - [Delivery roadmap](docs/ROADMAP.md)
 - [Architecture decision records](docs/adr/README.md)
 - [Testing and quality checks](docs/TESTING.md)
+- [Shared API contracts and OpenAPI workflow](docs/API_CONTRACT.md)
 - [Authentication setup and operation](docs/AUTHENTICATION.md)
 - [Full Compose verification and evidence](docs/COMPOSE_VERIFICATION.md)

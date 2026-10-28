@@ -1,7 +1,7 @@
 "use client";
 
 import { FormEvent, useEffect, useRef, useState } from "react";
-import { Account, authAction, currentAccount } from "./api";
+import { Account, ApiError, authAction, currentAccount } from "./api";
 
 type Mode = "signin" | "recover" | "reset";
 
@@ -10,6 +10,8 @@ export default function AuthScreen({ mode = "signin" }: { mode?: Mode }) {
   const [loading, setLoading] = useState(mode === "signin");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
+  const [requestId, setRequestId] = useState<string>();
   const [message, setMessage] = useState("");
   const [reset, setReset] = useState<{ uid: string; token: string } | null>(null);
   const errorRef = useRef<HTMLParagraphElement>(null);
@@ -55,9 +57,10 @@ export default function AuthScreen({ mode = "signin" }: { mode?: Mode }) {
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const form = event.currentTarget;
-    const values = Object.fromEntries(new FormData(form).entries()) as Record<string, string>;
-    setError(""); setMessage("");
-    if (values.new_password && values.new_password !== values.confirm_password) {
+    const { confirm_password: confirmation, ...values } =
+      Object.fromEntries(new FormData(form).entries()) as Record<string, string>;
+    setError(""); setMessage(""); setFieldErrors({}); setRequestId(undefined);
+    if (values.new_password && values.new_password !== confirmation) {
       setError("The new passwords do not match."); return;
     }
     setBusy(true);
@@ -79,11 +82,18 @@ export default function AuthScreen({ mode = "signin" }: { mode?: Mode }) {
       form.reset();
     } catch (failure) {
       setError(failure instanceof Error ? failure.message : "We couldn’t connect. Please try again.");
+      if (failure instanceof ApiError) {
+        const allowed = new Set(["email", "password", "current_password", "new_password"]);
+        setFieldErrors(Object.fromEntries(failure.fields
+          .filter((field) => allowed.has(field.path.slice(1)))
+          .map((field) => [field.path.slice(1), field.message])));
+        setRequestId(failure.requestId);
+      }
     } finally { setBusy(false); }
   }
 
   async function signOut() {
-    setBusy(true); setError("");
+    setBusy(true); setError(""); setFieldErrors({}); setRequestId(undefined);
     try { await authAction("logout"); setAccount(null); setMessage("You’re signed out."); }
     catch { setError("We couldn’t sign you out. Please try again."); }
     finally { setBusy(false); }
@@ -96,7 +106,9 @@ export default function AuthScreen({ mode = "signin" }: { mode?: Mode }) {
     <section aria-labelledby="auth-title" className="auth-card">
       <p className="eyebrow">Your financial overview</p>
       <h1 id="auth-title">{title}</h1>
-      {error && <p role="alert" tabIndex={-1} ref={errorRef} className="form-error">{error}</p>}
+      {error && <p role="alert" tabIndex={-1} ref={errorRef} className="form-error">{error}
+        {requestId && <span> Reference: {requestId}</span>}
+      </p>}
       {message && <p role="status" className="form-success">{message}</p>}
       {account && <>
         <p>Signed in as {account.email}</p>
@@ -115,18 +127,27 @@ export default function AuthScreen({ mode = "signin" }: { mode?: Mode }) {
         <fieldset disabled={busy}>
           <legend className="visually-hidden">{account ? "Change password" : title}</legend>
           {!account && mode !== "reset" && <label>Email address
-            <input type="email" name="email" autoComplete="username" required maxLength={254} />
+            <input type="email" name="email" autoComplete="username" required maxLength={254}
+              aria-invalid={!!fieldErrors.email} aria-describedby={fieldErrors.email ? "email-error" : undefined} />
+            {fieldErrors.email && <span id="email-error" className="form-error">{fieldErrors.email}</span>}
           </label>}
           {!account && mode === "signin" && <label>Password
-            <input type="password" name="password" autoComplete="current-password" required maxLength={1024} />
+            <input type="password" name="password" autoComplete="current-password" required maxLength={1024}
+              aria-invalid={!!fieldErrors.password} aria-describedby={fieldErrors.password ? "password-error" : undefined} />
+            {fieldErrors.password && <span id="password-error" className="form-error">{fieldErrors.password}</span>}
           </label>}
           {account && <label>Current password
-            <input type="password" name="current_password" autoComplete="current-password" required maxLength={1024} />
+            <input type="password" name="current_password" autoComplete="current-password" required maxLength={1024}
+              aria-invalid={!!fieldErrors.current_password} aria-describedby={fieldErrors.current_password ? "current-password-error" : undefined} />
+            {fieldErrors.current_password && <span id="current-password-error" className="form-error">{fieldErrors.current_password}</span>}
           </label>}
           {(account || mode === "reset") && <>
             <p id="password-help">Use at least 12 characters. Avoid common passwords and personal details.</p>
             <label>New password
-              <input type="password" name="new_password" autoComplete="new-password" aria-describedby="password-help" required minLength={12} maxLength={1024} />
+              <input type="password" name="new_password" autoComplete="new-password" required minLength={12} maxLength={1024}
+                aria-invalid={!!fieldErrors.new_password}
+                aria-describedby={fieldErrors.new_password ? "password-help new-password-error" : "password-help"} />
+              {fieldErrors.new_password && <span id="new-password-error" className="form-error">{fieldErrors.new_password}</span>}
             </label>
             <label>Confirm new password
               <input type="password" name="confirm_password" autoComplete="new-password" required minLength={12} maxLength={1024} />

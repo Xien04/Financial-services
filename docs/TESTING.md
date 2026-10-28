@@ -21,6 +21,7 @@ uv run ruff check backend infra
 uv run ruff format --check backend infra
 uv run mypy
 uv run python backend/manage.py check --settings=config.settings.test
+uv run python infra/check_api_schema.py
 uv run python backend/manage.py test tests.unit tests.contract --settings=config.settings.test --verbosity 2
 npm --prefix frontend run lint
 npm --prefix frontend run typecheck
@@ -71,6 +72,20 @@ The database suite exercises readiness, identity migrations, session/password
 lifecycle, workspace authorization, and concurrent identity operations against
 PostgreSQL. Ledger schemas and accounting tests remain future work; identity and
 readiness checks do not establish financial correctness.
+
+## API schema and contract checks
+
+`uv run --locked python infra/check_api_schema.py` generates OpenAPI from actual
+routes under isolated test settings, validates it without warnings, and fails on
+drift against `docs/api/openapi.json`. After an intentional API change, run the
+same command with `--update`, review the generated diff, and commit it with the
+implementation. See [API contracts](API_CONTRACT.md) for contributor rules and scope.
+
+Contract tests cover strict inputs, common safe errors (including CSRF/framework
+failures), request-ID replacement and concurrent isolation, development-only schema
+serving, and missing/modified contract failures. Response validation exercises
+actual anonymous routes locally and authenticated/recovery behavior in PostgreSQL
+CI. These checks do not implement financial posting or full structured logging.
 
 ## HTTP startup checks
 

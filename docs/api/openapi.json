@@ -1,0 +1,2157 @@
+{
+  "components": {
+    "schemas": {
+      "ChangePasswordInputRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "current_password": {
+            "maxLength": 1024,
+            "minLength": 1,
+            "type": "string",
+            "writeOnly": true
+          },
+          "new_password": {
+            "maxLength": 1024,
+            "minLength": 1,
+            "type": "string",
+            "writeOnly": true
+          }
+        },
+        "required": [
+          "current_password",
+          "new_password"
+        ],
+        "type": "object"
+      },
+      "CsrfOutput": {
+        "properties": {
+          "csrf_token": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "csrf_token"
+        ],
+        "type": "object"
+      },
+      "EmailInputRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "email": {
+            "format": "email",
+            "maxLength": 254,
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "email"
+        ],
+        "type": "object"
+      },
+      "EmptyInputRequest": {
+        "additionalProperties": false,
+        "type": "object"
+      },
+      "Error": {
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "detail": {
+            "type": "string"
+          },
+          "errors": {
+            "items": {
+              "$ref": "#/components/schemas/FieldError"
+            },
+            "type": "array"
+          },
+          "request_id": {
+            "format": "uuid",
+            "type": "string"
+          }
+        },
+        "required": [
+          "code",
+          "detail",
+          "errors",
+          "request_id"
+        ],
+        "type": "object"
+      },
+      "FieldError": {
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "code",
+          "message",
+          "path"
+        ],
+        "type": "object"
+      },
+      "LiveOutput": {
+        "properties": {
+          "status": {
+            "$ref": "#/components/schemas/LiveOutputStatusEnum"
+          }
+        },
+        "required": [
+          "status"
+        ],
+        "type": "object"
+      },
+      "LiveOutputStatusEnum": {
+        "description": "* `ok` - ok",
+        "enum": [
+          "ok"
+        ],
+        "type": "string"
+      },
+      "LoginInputRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "email": {
+            "format": "email",
+            "maxLength": 254,
+            "minLength": 1,
+            "type": "string"
+          },
+          "password": {
+            "maxLength": 1024,
+            "minLength": 1,
+            "type": "string",
+            "writeOnly": true
+          }
+        },
+        "required": [
+          "email",
+          "password"
+        ],
+        "type": "object"
+      },
+      "LoginOutput": {
+        "properties": {
+          "csrf_token": {
+            "type": "string"
+          },
+          "user": {
+            "$ref": "#/components/schemas/UserOutput"
+          }
+        },
+        "required": [
+          "csrf_token",
+          "user"
+        ],
+        "type": "object"
+      },
+      "MeOutput": {
+        "properties": {
+          "user": {
+            "$ref": "#/components/schemas/UserOutput"
+          }
+        },
+        "required": [
+          "user"
+        ],
+        "type": "object"
+      },
+      "MessageOutput": {
+        "properties": {
+          "detail": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "detail"
+        ],
+        "type": "object"
+      },
+      "ReadyOutput": {
+        "properties": {
+          "status": {
+            "$ref": "#/components/schemas/ReadyOutputStatusEnum"
+          }
+        },
+        "required": [
+          "status"
+        ],
+        "type": "object"
+      },
+      "ReadyOutputStatusEnum": {
+        "description": "* `ready` - ready",
+        "enum": [
+          "ready"
+        ],
+        "type": "string"
+      },
+      "ResetInputRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "new_password": {
+            "maxLength": 1024,
+            "minLength": 1,
+            "type": "string",
+            "writeOnly": true
+          },
+          "token": {
+            "maxLength": 128,
+            "minLength": 1,
+            "type": "string",
+            "writeOnly": true
+          },
+          "uid": {
+            "maxLength": 128,
+            "minLength": 1,
+            "type": "string",
+            "writeOnly": true
+          }
+        },
+        "required": [
+          "new_password",
+          "token",
+          "uid"
+        ],
+        "type": "object"
+      },
+      "RoleEnum": {
+        "description": "* `owner` - owner\n* `editor` - editor\n* `viewer` - viewer",
+        "enum": [
+          "owner",
+          "editor",
+          "viewer"
+        ],
+        "type": "string"
+      },
+      "UnavailableOutput": {
+        "properties": {
+          "status": {
+            "$ref": "#/components/schemas/UnavailableOutputStatusEnum"
+          }
+        },
+        "required": [
+          "status"
+        ],
+        "type": "object"
+      },
+      "UnavailableOutputStatusEnum": {
+        "description": "* `unavailable` - unavailable",
+        "enum": [
+          "unavailable"
+        ],
+        "type": "string"
+      },
+      "UserOutput": {
+        "properties": {
+          "display_name": {
+            "type": "string"
+          },
+          "email": {
+            "format": "email",
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "timezone": {
+            "type": "string"
+          },
+          "workspaces": {
+            "items": {
+              "$ref": "#/components/schemas/WorkspaceOutput"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "display_name",
+          "email",
+          "id",
+          "timezone",
+          "workspaces"
+        ],
+        "type": "object"
+      },
+      "WorkspaceOutput": {
+        "properties": {
+          "id": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "role": {
+            "$ref": "#/components/schemas/RoleEnum"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "role"
+        ],
+        "type": "object"
+      }
+    },
+    "securitySchemes": {
+      "cookieAuth": {
+        "in": "cookie",
+        "name": "sessionid",
+        "type": "apiKey"
+      }
+    }
+  },
+  "info": {
+    "title": "Financial Services API",
+    "version": "1.0.0"
+  },
+  "openapi": "3.0.3",
+  "paths": {
+    "/api/v1/auth/activity": {
+      "post": {
+        "description": "Same-origin JSON API. Successful response shapes are stable. Errors use code/detail/errors/request_id. Responses are private and not cached. No idempotency key or pagination applies to this authentication operation.",
+        "operationId": "auth_activity",
+        "parameters": [
+          {
+            "description": "Django CSRF token from GET /api/v1/auth/csrf; required even before login. Send same-origin cookies and refresh the token after login.",
+            "in": "header",
+            "name": "X-CSRFToken",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Same-origin CSRF cookie set by the bootstrap endpoint.",
+            "in": "cookie",
+            "name": "csrftoken",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmptyInputRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "No response body",
+            "headers": {
+              "X-Request-ID": {
+                "description": "Fresh server-generated UUIDv4. Incoming caller IDs are replaced.",
+                "required": true,
+                "schema": {
+                  "format": "uuid",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "",
+            "headers": {
+              "X-Request-ID": {
+                "description": "Fresh server-generated UUIDv4. Incoming caller IDs are replaced.",
+                "required": true,
+                "schema": {
+                  "format": "uuid",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "",
+            "headers": {
+              "X-Request-ID": {
+                "description": "Fresh server-generated UUIDv4. Incoming caller IDs are replaced.",
+                "required": true,
+                "schema": {
+                  "format": "uuid",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "405": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "",
+            "headers": {
+              "Allow": {
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "X-Request-ID": {
+                "description": "Fresh server-generated UUIDv4. Incoming caller IDs are replaced.",
+                "required": true,
+                "schema": {
+                  "format": "uuid",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "406": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "",
+            "headers": {
+              "X-Request-ID": {
+                "description": "Fresh server-generated UUIDv4. Incoming caller IDs are replaced.",
+                "required": true,
+                "schema": {
+                  "format": "uuid",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "415": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "",
+            "headers": {
+              "X-Request-ID": {
+                "description": "Fresh server-generated UUIDv4. Incoming caller IDs are replaced.",
+                "required": true,
+                "schema": {
+                  "format": "uuid",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "",
+            "headers": {
+              "X-Request-ID": {
+                "description": "Fresh server-generated UUIDv4. Incoming caller IDs are replaced.",
+                "required": true,
+                "schema": {
+                  "format": "uuid",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "",
+            "headers": {
+              "X-Request-ID": {
+                "description": "Fresh server-generated UUIDv4. Incoming caller IDs are replaced.",
+                "required": true,
+                "schema": {
+                  "format": "uuid",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/api/v1/auth/csrf": {
+      "get": {
+        "description": "Same-origin JSON API. Successful response shapes are stable. Errors use code/detail/errors/request_id. Responses are private and not cached. No idempotency key or pagination applies to this authentication operation.",
+        "operationId": "auth_csrf",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CsrfOutput"
+                }
+              }
+            },
+            "description": "",
+            "headers": {
+              "X-Request-ID": {
+                "description": "Fresh server-generated UUIDv4. Incoming caller IDs are replaced.",
+                "required": true,
+                "schema": {
+                  "format": "uuid",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "",
+            "headers": {
+              "X-Request-ID": {
+                "description": "Fresh server-generated UUIDv4. Incoming caller IDs are replaced.",
+                "required": true,
+                "schema": {
+                  "format": "uuid",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "405": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "",
+            "headers": {
+              "Allow": {
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "X-Request-ID": {
+                "description": "Fresh server-generated UUIDv4. Incoming caller IDs are replaced.",
+                "required": true,
+                "schema": {
+                  "format": "uuid",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "406": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "",
+            "headers": {
+              "X-Request-ID": {
+                "description": "Fresh server-generated UUIDv4. Incoming caller IDs are replaced.",
+                "required": true,
+                "schema": {
+                  "format": "uuid",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "",
+            "headers": {
+              "X-Request-ID": {
+                "description": "Fresh server-generated UUIDv4. Incoming caller IDs are replaced.",
+                "required": true,
+                "schema": {
+                  "format": "uuid",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "",
+            "headers": {
+              "X-Request-ID": {
+                "description": "Fresh server-generated UUIDv4. Incoming caller IDs are replaced.",
+                "required": true,
+                "schema": {
+                  "format": "uuid",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/api/v1/auth/login": {
+      "post": {
+        "description": "Same-origin JSON API. Successful response shapes are stable. Errors use code/detail/errors/request_id. Responses are private and not cached. No idempotency key or pagination applies to this authentication operation.",
+        "operationId": "auth_login",
+        "parameters": [
+          {
+            "description": "Django CSRF token from GET /api/v1/auth/csrf; required even before login. Send same-origin cookies and refresh the token after login.",
+            "in": "header",
+            "name": "X-CSRFToken",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Same-origin CSRF cookie set by the bootstrap endpoint.",
+            "in": "cookie",
+            "name": "csrftoken",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginInputRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginOutput"
+                }
+              }
+            },
+            "description": "",
+            "headers": {
+              "X-Request-ID": {
+                "description": "Fresh server-generated UUIDv4. Incoming caller IDs are replaced.",
+                "required": true,
+                "schema": {
+                  "format": "uuid",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "",
+            "headers": {
+              "X-Request-ID": {
+                "description": "Fresh server-generated UUIDv4. Incoming caller IDs are replaced.",
+                "required": true,
+                "schema": {
+                  "format": "uuid",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "",
+            "headers": {
+              "X-Request-ID": {
+                "description": "Fresh server-generated UUIDv4. Incoming caller IDs are replaced.",
+                "required": true,
+                "schema": {
+                  "format": "uuid",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "405": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "",
+            "headers": {
+              "Allow": {
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "X-Request-ID": {
+                "description": "Fresh server-generated UUIDv4. Incoming caller IDs are replaced.",
+                "required": true,
+                "schema": {
+                  "format": "uuid",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "406": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "",
+            "headers": {
+              "X-Request-ID": {
+                "description": "Fresh server-generated UUIDv4. Incoming caller IDs are replaced.",
+                "required": true,
+                "schema": {
+                  "format": "uuid",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "415": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "",
+            "headers": {
+              "X-Request-ID": {
+                "description": "Fresh server-generated UUIDv4. Incoming caller IDs are replaced.",
+                "required": true,
+                "schema": {
+                  "format": "uuid",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "",
+            "headers": {
+              "Retry-After": {
+                "description": "Seconds until another attempt is allowed.",
+                "required": true,
+                "schema": {
+                  "type": "integer"
+                }
+              },
+              "X-Request-ID": {
+                "description": "Fresh server-generated UUIDv4. Incoming caller IDs are replaced.",
+                "required": true,
+                "schema": {
+                  "format": "uuid",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "",
+            "headers": {
+              "X-Request-ID": {
+                "description": "Fresh server-generated UUIDv4. Incoming caller IDs are replaced.",
+                "required": true,
+                "schema": {
+                  "format": "uuid",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "",
+            "headers": {
+              "X-Request-ID": {
+                "description": "Fresh server-generated UUIDv4. Incoming caller IDs are replaced.",
+                "required": true,
+                "schema": {
+                  "format": "uuid",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/api/v1/auth/logout": {
+      "post": {
+        "description": "Same-origin JSON API. Successful response shapes are stable. Errors use code/detail/errors/request_id. Responses are private and not cached. No idempotency key or pagination applies to this authentication operation.",
+        "operationId": "auth_logout",
+        "parameters": [
+          {
+            "description": "Django CSRF token from GET /api/v1/auth/csrf; required even before login. Send same-origin cookies and refresh the token after login.",
+            "in": "header",
+            "name": "X-CSRFToken",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Same-origin CSRF cookie set by the bootstrap endpoint.",
+            "in": "cookie",
+            "name": "csrftoken",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmptyInputRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "No response body",
+            "headers": {
+              "X-Request-ID": {
+                "description": "Fresh server-generated UUIDv4. Incoming caller IDs are replaced.",
+                "required": true,
+                "schema": {
+                  "format": "uuid",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "",
+            "headers": {
+              "X-Request-ID": {
+                "description": "Fresh server-generated UUIDv4. Incoming caller IDs are replaced.",
+                "required": true,
+                "schema": {
+                  "format": "uuid",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "",
+            "headers": {
+              "X-Request-ID": {
+                "description": "Fresh server-generated UUIDv4. Incoming caller IDs are replaced.",
+                "required": true,
+                "schema": {
+                  "format": "uuid",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "405": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "",
+            "headers": {
+              "Allow": {
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "X-Request-ID": {
+                "description": "Fresh server-generated UUIDv4. Incoming caller IDs are replaced.",
+                "required": true,
+                "schema": {
+                  "format": "uuid",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "406": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "",
+            "headers": {
+              "X-Request-ID": {
+                "description": "Fresh server-generated UUIDv4. Incoming caller IDs are replaced.",
+                "required": true,
+                "schema": {
+                  "format": "uuid",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "415": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "",
+            "headers": {
+              "X-Request-ID": {
+                "description": "Fresh server-generated UUIDv4. Incoming caller IDs are replaced.",
+                "required": true,
+                "schema": {
+                  "format": "uuid",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "",
+            "headers": {
+              "X-Request-ID": {
+                "description": "Fresh server-generated UUIDv4. Incoming caller IDs are replaced.",
+                "required": true,
+                "schema": {
+                  "format": "uuid",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "",
+            "headers": {
+              "X-Request-ID": {
+                "description": "Fresh server-generated UUIDv4. Incoming caller IDs are replaced.",
+                "required": true,
+                "schema": {
+                  "format": "uuid",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/api/v1/auth/me": {
+      "get": {
+        "description": "Same-origin JSON API. Successful response shapes are stable. Errors use code/detail/errors/request_id. Responses are private and not cached. No idempotency key or pagination applies to this authentication operation.",
+        "operationId": "auth_me",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MeOutput"
+                }
+              }
+            },
+            "description": "",
+            "headers": {
+              "X-Request-ID": {
+                "description": "Fresh server-generated UUIDv4. Incoming caller IDs are replaced.",
+                "required": true,
+                "schema": {
+                  "format": "uuid",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "",
+            "headers": {
+              "X-Request-ID": {
+                "description": "Fresh server-generated UUIDv4. Incoming caller IDs are replaced.",
+                "required": true,
+                "schema": {
+                  "format": "uuid",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "405": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "",
+            "headers": {
+              "Allow": {
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "X-Request-ID": {
+                "description": "Fresh server-generated UUIDv4. Incoming caller IDs are replaced.",
+                "required": true,
+                "schema": {
+                  "format": "uuid",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "406": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "",
+            "headers": {
+              "X-Request-ID": {
+                "description": "Fresh server-generated UUIDv4. Incoming caller IDs are replaced.",
+                "required": true,
+                "schema": {
+                  "format": "uuid",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "",
+            "headers": {
+              "X-Request-ID": {
+                "description": "Fresh server-generated UUIDv4. Incoming caller IDs are replaced.",
+                "required": true,
+                "schema": {
+                  "format": "uuid",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "",
+            "headers": {
+              "X-Request-ID": {
+                "description": "Fresh server-generated UUIDv4. Incoming caller IDs are replaced.",
+                "required": true,
+                "schema": {
+                  "format": "uuid",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/api/v1/auth/password/change": {
+      "post": {
+        "description": "Same-origin JSON API. Successful response shapes are stable. Errors use code/detail/errors/request_id. Responses are private and not cached. No idempotency key or pagination applies to this authentication operation.",
+        "operationId": "auth_password_change",
+        "parameters": [
+          {
+            "description": "Django CSRF token from GET /api/v1/auth/csrf; required even before login. Send same-origin cookies and refresh the token after login.",
+            "in": "header",
+            "name": "X-CSRFToken",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Same-origin CSRF cookie set by the bootstrap endpoint.",
+            "in": "cookie",
+            "name": "csrftoken",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChangePasswordInputRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageOutput"
+                }
+              }
+            },
+            "description": "",
+            "headers": {
+              "X-Request-ID": {
+                "description": "Fresh server-generated UUIDv4. Incoming caller IDs are replaced.",
+                "required": true,
+                "schema": {
+                  "format": "uuid",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "",
+            "headers": {
+              "X-Request-ID": {
+                "description": "Fresh server-generated UUIDv4. Incoming caller IDs are replaced.",
+                "required": true,
+                "schema": {
+                  "format": "uuid",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "",
+            "headers": {
+              "X-Request-ID": {
+                "description": "Fresh server-generated UUIDv4. Incoming caller IDs are replaced.",
+                "required": true,
+                "schema": {
+                  "format": "uuid",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "405": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "",
+            "headers": {
+              "Allow": {
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "X-Request-ID": {
+                "description": "Fresh server-generated UUIDv4. Incoming caller IDs are replaced.",
+                "required": true,
+                "schema": {
+                  "format": "uuid",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "406": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "",
+            "headers": {
+              "X-Request-ID": {
+                "description": "Fresh server-generated UUIDv4. Incoming caller IDs are replaced.",
+                "required": true,
+                "schema": {
+                  "format": "uuid",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "415": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "",
+            "headers": {
+              "X-Request-ID": {
+                "description": "Fresh server-generated UUIDv4. Incoming caller IDs are replaced.",
+                "required": true,
+                "schema": {
+                  "format": "uuid",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "",
+            "headers": {
+              "Retry-After": {
+                "description": "Seconds until another attempt is allowed.",
+                "required": true,
+                "schema": {
+                  "type": "integer"
+                }
+              },
+              "X-Request-ID": {
+                "description": "Fresh server-generated UUIDv4. Incoming caller IDs are replaced.",
+                "required": true,
+                "schema": {
+                  "format": "uuid",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "",
+            "headers": {
+              "X-Request-ID": {
+                "description": "Fresh server-generated UUIDv4. Incoming caller IDs are replaced.",
+                "required": true,
+                "schema": {
+                  "format": "uuid",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "",
+            "headers": {
+              "X-Request-ID": {
+                "description": "Fresh server-generated UUIDv4. Incoming caller IDs are replaced.",
+                "required": true,
+                "schema": {
+                  "format": "uuid",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/api/v1/auth/password/recover": {
+      "post": {
+        "description": "Same-origin JSON API. Successful response shapes are stable. Errors use code/detail/errors/request_id. Responses are private and not cached. No idempotency key or pagination applies to this authentication operation.",
+        "operationId": "auth_recover",
+        "parameters": [
+          {
+            "description": "Django CSRF token from GET /api/v1/auth/csrf; required even before login. Send same-origin cookies and refresh the token after login.",
+            "in": "header",
+            "name": "X-CSRFToken",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Same-origin CSRF cookie set by the bootstrap endpoint.",
+            "in": "cookie",
+            "name": "csrftoken",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmailInputRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageOutput"
+                }
+              }
+            },
+            "description": "",
+            "headers": {
+              "X-Request-ID": {
+                "description": "Fresh server-generated UUIDv4. Incoming caller IDs are replaced.",
+                "required": true,
+                "schema": {
+                  "format": "uuid",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "",
+            "headers": {
+              "X-Request-ID": {
+                "description": "Fresh server-generated UUIDv4. Incoming caller IDs are replaced.",
+                "required": true,
+                "schema": {
+                  "format": "uuid",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "",
+            "headers": {
+              "X-Request-ID": {
+                "description": "Fresh server-generated UUIDv4. Incoming caller IDs are replaced.",
+                "required": true,
+                "schema": {
+                  "format": "uuid",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "405": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "",
+            "headers": {
+              "Allow": {
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "X-Request-ID": {
+                "description": "Fresh server-generated UUIDv4. Incoming caller IDs are replaced.",
+                "required": true,
+                "schema": {
+                  "format": "uuid",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "406": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "",
+            "headers": {
+              "X-Request-ID": {
+                "description": "Fresh server-generated UUIDv4. Incoming caller IDs are replaced.",
+                "required": true,
+                "schema": {
+                  "format": "uuid",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "415": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "",
+            "headers": {
+              "X-Request-ID": {
+                "description": "Fresh server-generated UUIDv4. Incoming caller IDs are replaced.",
+                "required": true,
+                "schema": {
+                  "format": "uuid",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "",
+            "headers": {
+              "Retry-After": {
+                "description": "Seconds until another attempt is allowed.",
+                "required": true,
+                "schema": {
+                  "type": "integer"
+                }
+              },
+              "X-Request-ID": {
+                "description": "Fresh server-generated UUIDv4. Incoming caller IDs are replaced.",
+                "required": true,
+                "schema": {
+                  "format": "uuid",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "",
+            "headers": {
+              "X-Request-ID": {
+                "description": "Fresh server-generated UUIDv4. Incoming caller IDs are replaced.",
+                "required": true,
+                "schema": {
+                  "format": "uuid",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "",
+            "headers": {
+              "X-Request-ID": {
+                "description": "Fresh server-generated UUIDv4. Incoming caller IDs are replaced.",
+                "required": true,
+                "schema": {
+                  "format": "uuid",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/api/v1/auth/password/reset": {
+      "post": {
+        "description": "Same-origin JSON API. Successful response shapes are stable. Errors use code/detail/errors/request_id. Responses are private and not cached. No idempotency key or pagination applies to this authentication operation.",
+        "operationId": "auth_reset",
+        "parameters": [
+          {
+            "description": "Django CSRF token from GET /api/v1/auth/csrf; required even before login. Send same-origin cookies and refresh the token after login.",
+            "in": "header",
+            "name": "X-CSRFToken",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Same-origin CSRF cookie set by the bootstrap endpoint.",
+            "in": "cookie",
+            "name": "csrftoken",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResetInputRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageOutput"
+                }
+              }
+            },
+            "description": "",
+            "headers": {
+              "X-Request-ID": {
+                "description": "Fresh server-generated UUIDv4. Incoming caller IDs are replaced.",
+                "required": true,
+                "schema": {
+                  "format": "uuid",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "",
+            "headers": {
+              "X-Request-ID": {
+                "description": "Fresh server-generated UUIDv4. Incoming caller IDs are replaced.",
+                "required": true,
+                "schema": {
+                  "format": "uuid",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "",
+            "headers": {
+              "X-Request-ID": {
+                "description": "Fresh server-generated UUIDv4. Incoming caller IDs are replaced.",
+                "required": true,
+                "schema": {
+                  "format": "uuid",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "405": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "",
+            "headers": {
+              "Allow": {
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "X-Request-ID": {
+                "description": "Fresh server-generated UUIDv4. Incoming caller IDs are replaced.",
+                "required": true,
+                "schema": {
+                  "format": "uuid",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "406": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "",
+            "headers": {
+              "X-Request-ID": {
+                "description": "Fresh server-generated UUIDv4. Incoming caller IDs are replaced.",
+                "required": true,
+                "schema": {
+                  "format": "uuid",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "415": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "",
+            "headers": {
+              "X-Request-ID": {
+                "description": "Fresh server-generated UUIDv4. Incoming caller IDs are replaced.",
+                "required": true,
+                "schema": {
+                  "format": "uuid",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "",
+            "headers": {
+              "Retry-After": {
+                "description": "Seconds until another attempt is allowed.",
+                "required": true,
+                "schema": {
+                  "type": "integer"
+                }
+              },
+              "X-Request-ID": {
+                "description": "Fresh server-generated UUIDv4. Incoming caller IDs are replaced.",
+                "required": true,
+                "schema": {
+                  "format": "uuid",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "",
+            "headers": {
+              "X-Request-ID": {
+                "description": "Fresh server-generated UUIDv4. Incoming caller IDs are replaced.",
+                "required": true,
+                "schema": {
+                  "format": "uuid",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "",
+            "headers": {
+              "X-Request-ID": {
+                "description": "Fresh server-generated UUIDv4. Incoming caller IDs are replaced.",
+                "required": true,
+                "schema": {
+                  "format": "uuid",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/api/v1/health/live": {
+      "get": {
+        "operationId": "health_live",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LiveOutput"
+                }
+              }
+            },
+            "description": "",
+            "headers": {
+              "X-Request-ID": {
+                "description": "Fresh server-generated UUIDv4. Incoming caller IDs are replaced.",
+                "required": true,
+                "schema": {
+                  "format": "uuid",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "405": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "",
+            "headers": {
+              "Allow": {
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "X-Request-ID": {
+                "description": "Fresh server-generated UUIDv4. Incoming caller IDs are replaced.",
+                "required": true,
+                "schema": {
+                  "format": "uuid",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "406": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "",
+            "headers": {
+              "X-Request-ID": {
+                "description": "Fresh server-generated UUIDv4. Incoming caller IDs are replaced.",
+                "required": true,
+                "schema": {
+                  "format": "uuid",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "",
+            "headers": {
+              "X-Request-ID": {
+                "description": "Fresh server-generated UUIDv4. Incoming caller IDs are replaced.",
+                "required": true,
+                "schema": {
+                  "format": "uuid",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "health"
+        ]
+      }
+    },
+    "/api/v1/health/ready": {
+      "get": {
+        "description": "Readiness retains its small probe body, including dependency failure.",
+        "operationId": "health_ready",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReadyOutput"
+                }
+              }
+            },
+            "description": "",
+            "headers": {
+              "X-Request-ID": {
+                "description": "Fresh server-generated UUIDv4. Incoming caller IDs are replaced.",
+                "required": true,
+                "schema": {
+                  "format": "uuid",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "405": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "",
+            "headers": {
+              "Allow": {
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "X-Request-ID": {
+                "description": "Fresh server-generated UUIDv4. Incoming caller IDs are replaced.",
+                "required": true,
+                "schema": {
+                  "format": "uuid",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "406": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "",
+            "headers": {
+              "X-Request-ID": {
+                "description": "Fresh server-generated UUIDv4. Incoming caller IDs are replaced.",
+                "required": true,
+                "schema": {
+                  "format": "uuid",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "",
+            "headers": {
+              "X-Request-ID": {
+                "description": "Fresh server-generated UUIDv4. Incoming caller IDs are replaced.",
+                "required": true,
+                "schema": {
+                  "format": "uuid",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnavailableOutput"
+                }
+              }
+            },
+            "description": "",
+            "headers": {
+              "X-Request-ID": {
+                "description": "Fresh server-generated UUIDv4. Incoming caller IDs are replaced.",
+                "required": true,
+                "schema": {
+                  "format": "uuid",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "health"
+        ]
+      }
+    }
+  }
+}
