@@ -12,6 +12,8 @@ scaffold, six module packages, local Compose configuration, and startup checks a
 present. Email/password authentication, recovery, UUID identity models, initial
 owner provisioning, and workspace policy services are implemented. PostgreSQL
 migrations, integration tests, and the full Compose setup pass in hosted Linux CI.
+Shared validation/errors, server-generated request IDs, and generated OpenAPI
+are implemented; see [API verification](docs/API_VERIFICATION.md).
 Complete browser workflows and SMTP delivery remain unverified. Ledger models and
 financial workflows are not implemented. This environment is for local development. See the
 [roadmap](docs/ROADMAP.md) and [tooling ADR](docs/adr/0004-use-uv-and-foundation-tooling.md).

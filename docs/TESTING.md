@@ -75,6 +75,9 @@ readiness checks do not establish financial correctness.
 
 ## API schema and contract checks
 
+Current source, hosted results, and scope exceptions are recorded in
+[API verification](API_VERIFICATION.md).
+
 `uv run --locked python infra/check_api_schema.py` generates OpenAPI from actual
 routes under isolated test settings, validates it without warnings, and fails on
 drift against `docs/api/openapi.json`. After an intentional API change, run the

@@ -84,7 +84,7 @@ deployment/proxy header verification is #16. This change does not claim either g
 The selected drf-spectacular 0.30.0 works with the pinned Django 5.2.18, DRF 3.18.3,
 and Python 3.14 runtime. The initial isolated smoke check used Python 3.14.8 and
 proved generation, OpenAPI 3.0.3 validation, and a decorated APIView HTTP response.
-Repository contract/integration checks exercise the actual view annotations next.
+Repository contract/integration checks also exercise the actual view annotations.
 Exact dependencies and their transitive locks are in pyproject.toml/uv.lock.
 
 From the repository root:

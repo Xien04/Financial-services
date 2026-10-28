@@ -45,7 +45,7 @@ Accepted and closed by Brenson Go on 2026-09-18.
 - [x] Add PostgreSQL migrations, UUID conventions, and environment-specific settings.
 - [ ] Implement email/password authentication and password reset.
 - [ ] Implement workspaces, membership roles, and reusable authorization policies.
-- [ ] Establish versioned API, OpenAPI generation, validation, errors, request IDs, and idempotency conventions.
+- [x] Establish versioned API, OpenAPI generation, validation, errors, request IDs, and idempotency conventions.
 - [x] Add formatting, linting, unit-test, integration-test, and type-check commands.
 - [ ] Add CI, Docker Compose, health endpoints, structured redacted logs, backups, and a restore runbook.
 - [ ] Add secret scanning and verify no credentials exist in the current tree or published history.
@@ -61,17 +61,22 @@ Issue #11's full Compose verification passed in hosted Linux CI on 2026-10-27:
 fresh image builds/startup, application-role migrations and permissions, runtime
 users/ports, database-outage health checks, and identity persistence after restart.
 See [Compose verification](COMPOSE_VERIFICATION.md) for the exact environment and
-evidence. Browser/SMTP, shared API implementation, structured logs, production
+evidence. Browser/SMTP, structured logs, production
 operations, backup/restore, and historical secret verification remain open.
 
 Brenson Go accepted issue #12's API and idempotency decisions on 2026-10-27 in
 [ADR 0008](adr/0008-standardize-api-contracts.md) and
 [ADR 0009](adr/0009-make-financial-writes-idempotent.md), explicitly confirming:
-"Both documents are accepted." PR #21 records that acceptance and closes #12
-when merged. #14 implements the applicable current API conventions, including the
-OpenAPI tooling compatibility check; #15 uses the request-ID contract. Actual
-financial posting/retry enforcement remains a Milestone 2 responsibility. API
-implementation and the combined Milestone 1 feature checkbox remain incomplete.
+"Both documents are accepted." Merged PR #21 records that acceptance and closed
+#12. Issue #14 implements applicable current API conventions, including the
+OpenAPI tooling compatibility check. Its PR #24 passed all four hosted jobs on
+2026-10-28: 80 backend tests, 20 frontend tests, both HTTP smoke tests, full Compose,
+schema drift, lint/types/build, dependency audits, and working-tree scanning. See
+[API contracts](API_CONTRACT.md) and [verification](API_VERIFICATION.md). No current
+authentication/health route needs pagination or financial idempotency. The API
+conventions checkbox is complete; actual financial posting/retry enforcement
+remains a Milestone 2 responsibility. #15 implements structured logging against
+the established request-ID context. Milestone 1 remains open.
 
 The product owner requested issue #13's policy decisions before further feature
 implementation. Brenson Go accepted the retention/closure policy in
@@ -296,6 +301,7 @@ claimed by policy acceptance. Milestone 1 completion checkboxes remain open.
 
 ## Completed work
 
+- 2026-10-28: Implemented issue #14's current API contracts under ADRs 0008–0009: strict JSON/field validation, safe errors, fresh request IDs, frontend field/reference handling, generated OpenAPI, and a CI drift gate. All hosted quality jobs passed, including 80 backend tests and full Compose; see [API verification](API_VERIFICATION.md). Financial posting/idempotency and real collection pagination remain with their owning workflows.
 - 2026-10-27: Completed issue #11's Compose verification in GitHub Actions and corrected the API image PATH so documented `python manage.py` commands use its installed virtualenv. The full Compose job and all existing quality/security jobs passed, including 62 backend tests. See [Compose verification](COMPOSE_VERIFICATION.md). This does not close the remaining Milestone 1 gates.
 - 2026-10-27: Fixed PR #10's stale-user password-reset test setup. Hosted CI passed PostgreSQL migrations, all 55 backend tests, 15 frontend tests, lint/type/build/HTTP checks, both dependency audits, and working-tree secret scanning. See [authentication verification](AUTHENTICATION_VERIFICATION.md); actual SMTP/browser workflows, local Compose, and production operations remain open.
 - 2026-10-22: Implemented authentication, UUID identity/workspace schemas, initial owner provisioning, workspace policies, and rate limiting under ADRs 0006–0007. Brenson Go accepted ADR 0006 covering browser sessions, recovery lifetimes, and role permissions. Verification status is recorded in [authentication verification](AUTHENTICATION_VERIFICATION.md).
@@ -315,6 +321,6 @@ claimed by policy acceptance. Milestone 1 completion checkboxes remain open.
 - Automated-testing follow-up: review historical secrets separately from working-tree scanning and add full browser and accounting/property tests with their owning workflows. Identity/tenant integration tests now pass in hosted PostgreSQL CI. See [testing guide](TESTING.md).
 
 - The initial scaffold uses ADR 0004 tooling and committed uv/npm locks. Hosted PostgreSQL and full Compose verification now pass, including initialization grants, application-role migrations, runtime boundaries, and persistence. The Windows host remains without Docker; the recorded full-stack evidence is from Linux CI. Remaining Milestone 1 checkboxes stay open pending their full criteria.
-- Actual SMTP/browser authentication, production-edge verification, API/OpenAPI implementation, historical secret review, structured logging, production serving, and backup/restore drills remain Milestone 1 work. Rate-limit thresholds and implementation are recorded in ADR 0007. API and financial idempotency contracts are accepted in ADRs 0008–0009; actual financial posting enforcement remains Milestone 2 work.
+- Actual SMTP/browser authentication, production-edge verification, historical secret review, structured logging, production serving, and backup/restore drills remain Milestone 1 work. Rate-limit thresholds and implementation are recorded in ADR 0007. Current API/OpenAPI contracts are implemented under ADRs 0008–0009; actual financial posting enforcement and signed pagination for real collections remain with their owning workflows.
 - Architecture choices not covered by an accepted ADR (for example Celery and Redis, and object storage) remain recommendations in the architecture document until their own ADRs are accepted.
 - Bank feeds, brokerage accounting, real-time pricing, advanced multi-currency accounting, tax preparation, money movement, credit monitoring, and AI-generated advice are outside MVP.
