@@ -207,6 +207,15 @@ workflow tests, historical secret scanning, structured logging, production
 hosting, and documented backup/restore drills. Foundation checks alone do not
 complete the milestone.
 
+## Contributing
+
+Name issue branches `<type>/<issue-number>-<short-description>`, for example
+`feat/14-api-contracts` or `docs/13-retention-recovery-policies`. Use lowercase,
+hyphen-separated descriptions. Without a linked issue, omit the issue number.
+Choose the prefix by the primary change; see the full
+[branch naming convention](AGENT.md#branch-naming-and-pr-targets).
+Start ordinary work from current `origin/main` and target `main` in the PR.
+
 ## Documentation
 
 - [Product architecture](docs/PRODUCT_ARCHITECTURE.md)

@@ -269,6 +269,36 @@ Apply the same evidence-based, locked-dependency policy to the frontend and othe
 
 ## Required workflow for every change
 
+### Branch naming and PR targets
+
+Use `<type>/<issue-number>-<short-description>` for issue-linked work, with a
+lowercase, hyphen-separated description. Examples: `feat/14-api-contracts`,
+`docs/13-retention-recovery-policies`, and `fix/10-reset-token-test`.
+For work without an issue, use `<type>/<short-description>` rather than inventing
+an issue number. Choose the type by the primary change; supporting tests and
+documentation stay on the same feature/fix branch.
+
+| Prefix | Use for |
+|---|---|
+| `feat/` | A new feature or application behavior |
+| `fix/` | A bug fix |
+| `docs/` | Documentation-only changes, including ADRs and runbooks |
+| `chore/` | Maintenance without application behavior changes: dependency updates, configuration, tooling, cleanup |
+| `test/` | Adding or fixing tests only |
+| `refactor/` | Restructuring code without changing its behavior |
+| `perf/` | Improving speed or resource usage |
+| `build/` | Build systems, Dockerfiles, or packaging |
+| `ci/` | CI pipelines and workflows |
+| `security/` | Security fixes when kept separate from `fix/` |
+| `revert/` | Undoing an earlier change |
+| `promote/` | An explicitly requested promotion between existing branches; use a date such as `promote/2026-10-28` |
+
+Start ordinary work from current `origin/main`, open the PR against `main`, and
+link the relevant issue when one exists. Promotion branch naming applies only
+when a promotion workflow is explicitly requested; it does not create additional
+deployment branches. This convention replaces the previous `codex/` branch prefix
+for new work. Existing branch names remain historical records.
+
 ### 1. Establish context before proposing work
 
 - [ ] Read this file and the source documents relevant to the requested area.
