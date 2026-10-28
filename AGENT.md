@@ -25,6 +25,8 @@ ADRs 0001–0003 were accepted by the product owner on 2026-09-18: the Django mo
 
 Brenson Go accepted ADRs [0008](docs/adr/0008-standardize-api-contracts.md) and [0009](docs/adr/0009-make-financial-writes-idempotent.md) on 2026-10-27. They govern shared validation/errors, server-generated request IDs, implementation-generated OpenAPI, cursor pagination, and durable financial idempotency. Issue #14 implements applicable current API contracts, including the schema-tool compatibility gate. Real financial posting enforcement and concurrency evidence remain Milestone 2 work; acceptance does not claim implementation is complete.
 
+Brenson Go accepted ADRs [0010](docs/adr/0010-define-data-retention-and-deletion.md) and [0011](docs/adr/0011-define-backup-and-recovery-targets.md) on 2026-10-28. They govern data retention/access, account/workspace closure, protected recovery records, encrypted off-host backups, and recovery responsibilities. The targets are one-hour RPO and four-hour RTO, with backups every 30 minutes and full restore drills at least every 30 days. Issue #18 implements and measures these controls; acceptance is not evidence that backups, cleanup, deletion, or those recovery targets already work.
+
 Consequently:
 
 - The modular monolith, ledger-entry model, and PostgreSQL are binding. Changing any of them requires a superseding ADR.
@@ -213,6 +215,7 @@ upload -> inspect -> map -> normalize -> validate
 - Use least-privilege credentials for database, storage, workers, integrations, and deployment.
 - Lock dependency versions, scan dependencies and secrets in CI, and patch routinely.
 - Provide full user-data export and account-deletion workflows with explicit retention behavior.
+- Follow accepted [ADR 0010](docs/adr/0010-define-data-retention-and-deletion.md) for data-class retention, access, closure/profile minimization, backup-delay disclosure, and incident holds. Financial history/audit/idempotency identities have no automatic expiry; account closure is not permission to physically erase them. Future uploads/exports must preserve required provenance and enforce their own expiry/revocation rules.
 
 If a real credential is discovered, do not merely delete the file: stop exposure, rotate or revoke the credential, assess repository history and build caches, coordinate any required history cleanup, review access logs, and reduce the replacement credential to least privilege.
 
@@ -254,6 +257,7 @@ The planned Docker Compose topology has separately configurable web, API, Celery
 - Run migrations as a controlled release step, not concurrently from every web process.
 - Maintain rollback support and backward-compatible migrations throughout the rollout window.
 - Document backup and restore paths for persistent database and object-storage volumes.
+- Follow accepted [ADR 0011](docs/adr/0011-define-backup-and-recovery-targets.md) for backup cadence/deadlines, age encryption, independent storage and key custody, retention safeguards, and measured recovery targets. After restoration, reapply identity/deletion restrictions and reconcile the recovery gap before reopening access or financial writes; never shorten the RTO timer to exclude operator response or bypass the safety gate.
 - Correlate structured, redacted logs by request or job ID.
 - Exercise clean install, migration, rollback, backup restore, and secret rotation before MVP release.
 
