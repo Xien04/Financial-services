@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { authAction, currentAccount } from "./api";
+import { ApiError, authAction, currentAccount } from "./api";
 
 afterEach(() => vi.unstubAllGlobals());
 
@@ -23,7 +23,32 @@ describe("same-origin authentication transport", () => {
 
   it("shows server validation errors without exposing raw responses", async () => {
     vi.stubGlobal("fetch", vi.fn().mockResolvedValueOnce(new Response(JSON.stringify({ csrf_token: "masked-value" })))
-      .mockResolvedValueOnce(new Response(JSON.stringify({ detail: ["This reset link is invalid or has expired."] }), { status: 400 })));
+      .mockResolvedValueOnce(new Response(JSON.stringify({ code: "validation_error", detail: "Check the highlighted fields.",
+        errors: [{ path: "", code: "invalid_reset", message: "This reset link is invalid or has expired." }] }), { status: 400 })));
     await expect(authAction("password/reset")).rejects.toThrow("This reset link is invalid or has expired.");
   });
+
+  it("retains field errors and a matching server request reference", async () => {
+    const requestId = "3fbbcd4f-b207-4712-bcbd-1b55da617db6";
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValueOnce(new Response(JSON.stringify({ csrf_token: "masked-value" })))
+      .mockResolvedValueOnce(new Response(JSON.stringify({ code: "validation_error", detail: "Check the highlighted fields.",
+        errors: [{ path: "/email", code: "required", message: "This field is required." }], request_id: requestId }),
+      { status: 400, headers: { "X-Request-ID": requestId } })));
+    await expect(authAction("login")).rejects.toMatchObject({
+      name: "ApiError", code: "validation_error", requestId,
+      fields: [{ path: "/email", code: "required", message: "This field is required." }],
+    });
+  });
+
+  it.each(["<html>unexpected proxy response</html>", "null", JSON.stringify({ detail: "unexpected internal response" })])(
+    "uses a safe fallback for a response outside the API contract", async (body) => {
+      vi.stubGlobal("fetch", vi.fn().mockResolvedValueOnce(new Response(JSON.stringify({ csrf_token: "masked-value" })))
+        .mockResolvedValueOnce(new Response(body, { status: 502 })));
+      const failure = await authAction("login").catch((error: unknown) => error);
+      expect(failure).toBeInstanceOf(ApiError);
+      expect(failure).toMatchObject({ code: "transport_error", fields: [],
+        message: "We couldn’t complete that request. Check your details and try again." });
+      expect(fetch).toHaveBeenCalledTimes(2);
+    },
+  );
 });

@@ -251,8 +251,21 @@ Accepted by Brenson Go on 2026-10-27 after reviewing ADRs 0008–0009 in
 explicit confirmation was: "Both documents are accepted."
 
 This accepts the decision, including the tooling compatibility gate. It does not
-claim implementation or Milestone 1 is complete. Issue #12 remains open until
-PR #21 is merged; #14 implements the applicable current API conventions.
+claim implementation or Milestone 1 is complete. PR #21 subsequently merged and
+closed #12; #14 implements the applicable current API conventions.
+
+## Implementation record — 2026-10-28
+
+[PR #24](https://github.com/Xien04/Financial-services/pull/24) implements the
+current authentication/health contracts. drf-spectacular 0.30.0 passed the
+Python 3.14 / Django 5.2.18 / DRF 3.18.3 compatibility gate, warning-free schema
+generation/validation, actual route contract tests, PostgreSQL tests, and full
+Compose checks without downgrading the framework pins. See
+[API verification](../API_VERIFICATION.md) for tested commits and hosted evidence,
+and [API contracts](../API_CONTRACT.md) for contributor commands and scope.
+No existing route requires pagination or a financial operation key; their real
+collection/posting tests remain with those owning workflows. This records
+implementation evidence and does not change the accepted decision.
 
 ## References
 

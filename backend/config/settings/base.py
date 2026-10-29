@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "rest_framework",
+    "drf_spectacular",
     "financial_services.identity",
     "financial_services.ledger",
     "financial_services.imports",
@@ -46,6 +47,7 @@ INSTALLED_APPS = [
     "financial_services.integrations",
 ]
 MIDDLEWARE = [
+    "config.api.middleware.RequestIdMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -91,9 +93,23 @@ USE_TZ = True
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 REST_FRAMEWORK = {
+    "EXCEPTION_HANDLER": "config.api.errors.exception_handler",
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
     "DEFAULT_AUTHENTICATION_CLASSES": ["rest_framework.authentication.SessionAuthentication"],
     "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.IsAuthenticated"],
     "DEFAULT_RENDERER_CLASSES": ["rest_framework.renderers.JSONRenderer"],
+}
+
+CSRF_FAILURE_VIEW = "config.api.errors.csrf_failure"
+API_SCHEMA_ENABLED = False
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Financial Services API",
+    "VERSION": "1.0.0",
+    "OAS_VERSION": "3.0.3",
+    "COMPONENT_SPLIT_REQUEST": True,
+    "SERVE_INCLUDE_SCHEMA": False,
+    "SERVE_AUTHENTICATION": [],
+    "SERVE_PERMISSIONS": ["rest_framework.permissions.AllowAny"],
 }
 
 SESSION_COOKIE_SECURE = True
